@@ -1,0 +1,15 @@
+
+Watching Window is extension for OpenOffice which provides way 
+to watch cell value or formula on Spreadsheet document.
+
+Requirements
+Current version supports Apache OpenOffice 3.4 and later. 
+This is written in Python and requires PyUNO installation.
+
+Packaging
+ > ./mkpkg.zh
+
+String resources are stored in po files for each locales. 
+They have to be converted into each files and this can be 
+done by genres.py.
+ > python genres.py
