@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<oor:component-data 
+  xmlns:oor="http://openoffice.org/2001/registry" 
+  xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+  oor:package="org.openoffice.Office.UI" 
+  oor:name="CalcWindowState">
+<node oor:name="UIElements">
+<node oor:name="States">
+<node oor:name="private:resource/toolpanel/mytools.calc/WatchWindow" oor:op="replace">
+<prop oor:name="UIName">
+<value xml:lang="en-US">Watching Window</value>
+<value xml:lang="ja">ウォッチウィンドウ</value>
+<value xml:lang="ru">Окно наблюдения</value>
+</prop>
+<prop oor:name="ImageURL">
+<value>vnd.sun.star.extension://mytools.calc.WatchWindow/icons/ww_24.png</value>
+</prop>
+</node>
+</node>
+</node>
+</oor:component-data>

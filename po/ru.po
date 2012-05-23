@@ -1,0 +1,128 @@
+#. strings
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-03-31 15:43+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Translate Toolkit 1.9.0\n"
+"X-Accelerator-Marker: ~\n"
+
+#: id.label.ww
+msgid "Watching Window"
+msgstr "Окно наблюдения"
+
+#: id.extension.description
+msgid "Provides you to check the value or the formula of a cell on the spreadsheet."
+msgstr "Позволяет видеть значения выбранных ячеек документа Calc на панели задач."
+
+#: id.label.settings
+msgid "Settings"
+msgstr "Настройки"
+
+#: id.label.warn
+msgid "Warn if number of cells are going to add."
+msgstr "Подтверждение при добавлении ячеек, более чем"
+
+#: id.title.settings
+msgid "Watching Window Settings"
+msgstr "Настройки “Окна наблюдения”"
+
+#: id.label.default
+msgid "Default Settings"
+msgstr "Настройки по умолчанию"
+
+#: id.label.inputline
+msgid "Show input line"
+msgstr "Показывать строку ввода"
+
+#: id.label.store
+msgid "Store watches"
+msgstr "Store watches"
+
+#: id.label.about
+msgid "About"
+msgstr "About"
+
+#: id.label.ok
+msgid "~OK"
+msgstr "~OK"
+
+#: id.label.cancel
+msgid "~Cancel"
+msgstr "~Отмена"
+
+#: id.label.help
+msgid "~Help"
+msgstr "~Справка"
+
+#: id.inputline
+msgid "Input line"
+msgstr "Строка ввода"
+
+#: id.clear
+msgid "Clear"
+msgstr "Очистка"
+
+#: id.down
+msgid "Down"
+msgstr "Поднять вверх"
+
+#: id.updateall
+msgid "Update All"
+msgstr "Обновить"
+
+#: id.gotocell
+msgid "Go to Cell"
+msgstr "К ячейке"
+
+#: id.up
+msgid "Up"
+msgstr "Опустить вниз"
+
+#: id.value
+msgid "Value"
+msgstr "Знач."
+
+#: id.confirmcells
+msgid "Do you want to add %s cells?"
+msgstr "Хотите добавить %s ячеек ?"
+
+#: id.remove
+msgid "Remove"
+msgstr "Удалить"
+
+#: id.cell
+msgid "Cell"
+msgstr "Ячейка"
+
+#: id.settings
+msgid "Settings..."
+msgstr "Настройки..."
+
+#: id.add
+msgid "Add"
+msgstr "Добавить"
+
+#: id.goto
+msgid "Go to"
+msgstr "К"
+
+#: id.formula
+msgid "Formula"
+msgstr "Формула"
+
+#: id.sheet
+msgid "Sheet"
+msgstr "Лист"
+
+#: id.option
+msgid "Option"
+msgstr "Выбор"
+

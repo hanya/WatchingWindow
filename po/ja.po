@@ -1,0 +1,128 @@
+#. strings
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-03-31 15:43+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Translate Toolkit 1.9.0\n"
+"X-Accelerator-Marker: ~\n"
+
+#: id.label.ww
+msgid "Watching Window"
+msgstr "ウォッチウィンドウ"
+
+#: id.extension.description
+msgid "Provides you to check the value or the formula of a cell on the spreadsheet."
+msgstr "Calc シート上のセルの値および数式の変化をチェックします。"
+
+#: id.label.settings
+msgid "Settings"
+msgstr "設定"
+
+#: id.label.warn
+msgid "Warn if number of cells are going to add."
+msgstr "多数のセルを追加するとき警告"
+
+#: id.title.settings
+msgid "Watching Window Settings"
+msgstr "Watching Window 設定"
+
+#: id.label.default
+msgid "Default Settings"
+msgstr "デフォルト設定"
+
+#: id.label.inputline
+msgid "Show input line"
+msgstr "インプットラインを表示"
+
+#: id.label.store
+msgid "Store watches"
+msgstr "ウォッチセルを保存"
+
+#: id.label.about
+msgid "About"
+msgstr "ウォッチングウィンドウについて"
+
+#: id.label.ok
+msgid "~OK"
+msgstr "~OK"
+
+#: id.label.cancel
+msgid "~Cancel"
+msgstr "キャンセル"
+
+#: id.label.help
+msgid "~Help"
+msgstr "ヘルプ"
+
+#: id.inputline
+msgid "Input line"
+msgstr "インプットライン"
+
+#: id.clear
+msgid "Clear"
+msgstr "全削除"
+
+#: id.down
+msgid "Down"
+msgstr "下へ"
+
+#: id.updateall
+msgid "Update All"
+msgstr "全更新"
+
+#: id.gotocell
+msgid "Go to Cell"
+msgstr "移動"
+
+#: id.up
+msgid "Up"
+msgstr "上へ"
+
+#: id.value
+msgid "Value"
+msgstr "値"
+
+#: id.confirmcells
+msgid "Do you want to add %s cells?"
+msgstr "%s 個のセルを追加しますか？"
+
+#: id.remove
+msgid "Remove"
+msgstr "削除"
+
+#: id.cell
+msgid "Cell"
+msgstr "セル"
+
+#: id.settings
+msgid "Settings..."
+msgstr "設定..."
+
+#: id.add
+msgid "Add"
+msgstr "追加"
+
+#: id.goto
+msgid "Go to"
+msgstr "移動先"
+
+#: id.formula
+msgid "Formula"
+msgstr "数式"
+
+#: id.sheet
+msgid "Sheet"
+msgstr "シート"
+
+#: id.option
+msgid "Option"
+msgstr "オプション"
+

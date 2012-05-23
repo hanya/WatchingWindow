@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<oor:component-schema  
+	oor:name="WatchWindow" 
+	oor:package="mytools.calc" xml:ang="en-US" 
+	xmlns:oor="http://openoffice.org/2001/registry" 
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<templates/>
+	<component>
+		<group oor:name="Settings">
+			<info>
+				<desc>Watching window settings.</desc>
+			</info>
+			<prop oor:name="WarnNumberOfCells" oor:type="xs:int">
+				<info>
+					<desc>Confirm if number of cells are over the value at addition.</desc>
+				</info>
+			</prop>
+			<prop oor:name="InputLine" oor:type="xs:boolean">
+				<info>
+					<desc>Show input line at start time.</desc>
+				</info>
+			</prop>
+            <prop oor:name="StoreWatches" oor:type="xs:boolean">
+				<info>
+					<desc>Store watches in the current document.</desc>
+				</info>
+			</prop>
+		</group>
+	</component>
+</oor:component-schema>

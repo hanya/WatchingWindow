@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wiki2xhp version="2">
+	<meta>
+		<identifier>
+			mytools.calc.WatchWindow
+		</identifier>
+		<share_images>
+			True
+		</share_images>
+		<mode>
+			raw
+		</mode>
+		<file_extension>
+			.wiki
+		</file_extension>
+		<wiki/>
+		<out>
+			./help
+		</out>
+		<data>
+			./help_data
+		</data>
+		<html>
+			./help_html
+		</html>
+	</meta>
+<pages>
+<node application="watchingwindow">
+<item lang="en" title="Watching Window"/>
+<item lang="ja" title="ウォッチングウィンドウ"/>
+<item lang="ru" title="Окно наблюдения"/>
+<page file_name="index">
+<item lang="en" name="index" page_title="Watching Window" title="Watching Window"/>
+<item lang="ja" name="index" page_title="ウォッチングウィンドウ" title="ウォッチングウィンドウ"/>
+<item lang="ru" name="index" page_title="Окно наблюдения" title="Окно наблюдения"/>
+</page>
+</node>
+</pages>
+</wiki2xhp>

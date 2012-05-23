@@ -1,0 +1,112 @@
+#: id.label.ww
+msgid "Watching Window"
+msgstr ""
+
+#: id.extension.description
+msgid "Provides you to check the value or the formula of a cell on the spreadsheet."
+msgstr ""
+
+#: id.label.settings
+msgid "Settings"
+msgstr ""
+
+#: id.label.warn
+msgid "Warn if number of cells are going to add."
+msgstr ""
+
+#: id.title.settings
+msgid "Watching Window Settings"
+msgstr ""
+
+#: id.label.default
+msgid "Default Settings"
+msgstr ""
+
+#: id.label.inputline
+msgid "Show input line"
+msgstr ""
+
+#: id.label.store
+msgid "Store watches"
+msgstr ""
+
+#: id.label.about
+msgid "About"
+msgstr ""
+
+#: id.label.ok
+msgid "~OK"
+msgstr ""
+
+#: id.label.cancel
+msgid "~Cancel"
+msgstr ""
+
+#: id.label.help
+msgid "~Help"
+msgstr ""
+
+#: id.inputline
+msgid "Input line"
+msgstr ""
+
+#: id.clear
+msgid "Clear"
+msgstr ""
+
+#: id.down
+msgid "Down"
+msgstr ""
+
+#: id.updateall
+msgid "Update All"
+msgstr ""
+
+#: id.gotocell
+msgid "Go to Cell"
+msgstr ""
+
+#: id.up
+msgid "Up"
+msgstr ""
+
+#: id.value
+msgid "Value"
+msgstr ""
+
+#: id.confirmcells
+msgid "Do you want to add %s cells?"
+msgstr ""
+
+#: id.remove
+msgid "Remove"
+msgstr ""
+
+#: id.cell
+msgid "Cell"
+msgstr ""
+
+#: id.settings
+msgid "Settings..."
+msgstr ""
+
+#: id.add
+msgid "Add"
+msgstr ""
+
+#: id.goto
+msgid "Go to"
+msgstr ""
+
+#: id.formula
+msgid "Formula"
+msgstr ""
+
+#: id.sheet
+msgid "Sheet"
+msgstr ""
+
+#: id.option
+msgid "Option"
+msgstr ""
+

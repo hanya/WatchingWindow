@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest:manifest>
+ <manifest:file-entry manifest:full-path="registration.components" 
+  manifest:media-type="application/vnd.sun.star.uno-components"/>
+ <manifest:file-entry manifest:full-path="Factories.xcu" 
+  manifest:media-type="application/vnd.sun.star.configuration-data"/>
+ <manifest:file-entry manifest:full-path="CalcWindowState.xcu" 
+  manifest:media-type="application/vnd.sun.star.configuration-data"/>
+ <manifest:file-entry manifest:full-path="WatchWindow.xcs" 
+  manifest:media-type="application/vnd.sun.star.configuration-schema"/>
+ <manifest:file-entry manifest:full-path="WatchWindow.xcu" 
+  manifest:media-type="application/vnd.sun.star.configuration-data"/>
+ <manifest:file-entry manifest:full-path="help" 
+  manifest:media-type="application/vnd.sun.star.help"/>
+</manifest:manifest>

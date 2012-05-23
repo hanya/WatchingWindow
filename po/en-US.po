@@ -1,0 +1,128 @@
+#. strings
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-03-31 15:43+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en-US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Translate Toolkit 1.9.0\n"
+"X-Accelerator-Marker: ~\n"
+
+#: id.label.ww
+msgid "Watching Window"
+msgstr "Watching Window"
+
+#: id.extension.description
+msgid "Provides you to check the value or the formula of a cell on the spreadsheet."
+msgstr "Provides you to check the value or the formula of a cell on the spreadsheet."
+
+#: id.label.settings
+msgid "Settings"
+msgstr "Settings"
+
+#: id.label.warn
+msgid "Warn if number of cells are going to add."
+msgstr "Warn if number of cells are going to add."
+
+#: id.title.settings
+msgid "Watching Window Settings"
+msgstr "Watching Window Settings"
+
+#: id.label.default
+msgid "Default Settings"
+msgstr "Default Settings"
+
+#: id.label.inputline
+msgid "Show input line"
+msgstr "Show input line"
+
+#: id.label.store
+msgid "Store watches"
+msgstr "Store watches"
+
+#: id.label.about
+msgid "About"
+msgstr "About"
+
+#: id.label.ok
+msgid "~OK"
+msgstr "~OK"
+
+#: id.label.cancel
+msgid "~Cancel"
+msgstr "~Cancel"
+
+#: id.label.help
+msgid "~Help"
+msgstr "~Help"
+
+#: id.inputline
+msgid "Input line"
+msgstr "Input line"
+
+#: id.clear
+msgid "Clear"
+msgstr "Clear"
+
+#: id.down
+msgid "Down"
+msgstr "Down"
+
+#: id.updateall
+msgid "Update All"
+msgstr "Update All"
+
+#: id.gotocell
+msgid "Go to Cell"
+msgstr "Go to Cell"
+
+#: id.up
+msgid "Up"
+msgstr "Up"
+
+#: id.value
+msgid "Value"
+msgstr "Value"
+
+#: id.confirmcells
+msgid "Do you want to add %s cells?"
+msgstr "Do you want to add %s cells?"
+
+#: id.remove
+msgid "Remove"
+msgstr "Remove"
+
+#: id.cell
+msgid "Cell"
+msgstr "Cell"
+
+#: id.settings
+msgid "Settings..."
+msgstr "Settings..."
+
+#: id.add
+msgid "Add"
+msgstr "Add"
+
+#: id.goto
+msgid "Go to"
+msgstr "Go to"
+
+#: id.formula
+msgid "Formula"
+msgstr "Formula"
+
+#: id.sheet
+msgid "Sheet"
+msgstr "Sheet"
+
+#: id.option
+msgid "Option"
+msgstr "Option"
+

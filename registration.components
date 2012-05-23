@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://openoffice.org/2010/uno-components">
+ <component loader="com.sun.star.loader.Python"
+  uri="watchingwindow.py">
+  <implementation name="mytools.calc.WatchWindow">
+   <service name="mytools.calc.WatchWindow"/>
+  </implementation>
+ </component>
+</components>
