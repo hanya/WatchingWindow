@@ -6,14 +6,14 @@ from pyww.helper import get_config_access
 class Settings(object):
     """ Load and set configuration values. """
     
-    def __init__(self, ctx, res):
+    def __init__(self, ctx):
         self.ctx = ctx
-        self.res = res
+        self.res = None
         self._loaded = False
         self.check_input = None
         self.warn_cells = None
     
-    def configure(self):
+    def configure(self, res):
         from pyww.dialogs import SettingsDialog
         cua = get_config_access(self.ctx, CONFIG_NODE, True)
         
@@ -22,7 +22,7 @@ class Settings(object):
         store = cua.getPropertyValue("StoreWatches")
         
         dialog = SettingsDialog(
-            self.ctx, self.res, 
+            self.ctx, res, 
             show_input_line=show_input_line, 
             warn_cells=warn_cells, 
             store=store, 
@@ -115,9 +115,8 @@ class SettingsRDF(object):
     
     def add_list_to_order(self, names):
         if self.graph:
-            #self.order = names
-            for name in names:
-                self.order.append(name)
+            n = len(self.order)
+            self.order[n:n+len(names)] = names
             self.write_order()
     
     def add_to_order(self, name):

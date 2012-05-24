@@ -26,7 +26,6 @@ import unohelper
 from com.sun.star.ui import XUIElementFactory
 
 IMPL_NAME = "mytools.calc.WatchWindow"
-RESOURCE_NAME = "private:resource/toolpanel/mytools.calc/WatchWindow"
 
 class WatchingWindowFactory(unohelper.Base, XUIElementFactory):
     """ Factory for watching window. """
@@ -36,6 +35,7 @@ class WatchingWindowFactory(unohelper.Base, XUIElementFactory):
     # XUIElementFactory
     def createUIElement(self, name, args):
         element = None
+        from pyww import RESOURCE_NAME
         if name == RESOURCE_NAME:
             frame = None
             parent = None
@@ -45,10 +45,10 @@ class WatchingWindowFactory(unohelper.Base, XUIElementFactory):
                 elif arg.Name == "ParentWindow":
                     parent = arg.Value
             if frame and parent:
-                # should be checked what kind of document is
                 try:
-                    import pyww.ww
-                    element = pyww.ww.WatchingWindow(self.ctx, frame, parent)
+                    import pyww.element
+                    element = pyww.element.WatchingWindowUIElement(
+                        self.ctx, frame, parent)
                 except Exception as e:
                     print(e)
         return element
@@ -56,8 +56,10 @@ class WatchingWindowFactory(unohelper.Base, XUIElementFactory):
     # XServiceInfo
     def getImplementationName(self):
         return IMPL_NAME
+    
     def supportsService(self, name):
         return IMPL_NAME == name
+    
     def supportedServiceNames(self):
         return (IMPL_NAME,)
 

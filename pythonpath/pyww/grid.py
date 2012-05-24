@@ -6,17 +6,15 @@ from com.sun.star.table.CellContentType import FORMULA as CCT_FORMULA
 
 
 class Rows(object):
-    """ Container of Row. """
+    """ Row container. """
     
     def __init__(self, data_model, res):
         self._rows = []
         self._names = set()
         self.data_model = data_model
         
-        self._SHEET = res["Sheet"]
-        self._CELL = res["Cell"]
-        self._VALUE = res["Value"]
-        self._FORMUlA = res["Formula"]
+        self._tooltip = "%s: %%s\n%s: %%s\n%s: %%s\n%s: %%s" % (
+            res["Sheet"], res["Cell"], res["Value"], res["Formula"])
         
         self._reserved = []
     
@@ -52,14 +50,14 @@ class Rows(object):
     
     def _tooltip_from_data(self, data):
         """ Get tooltip text from data. """
-        return self._SHEET + ": " + data[0] + "\n" + self._CELL + ": " + data[1] + "\n" + \
-                self._VALUE + ": " + data[2] + "\n" + self._FORMUlA + data[3]
+        return self._tooltip % data
     
     def _broadcast_added(self, index, row):
         data_model = self.data_model
         data = row.get_data()
         data_model.addRow(row.get_header(), data)
-        data_model.updateRowToolTip(self.getRowCount() -1, self._tooltip_from_data(data))
+        data_model.updateRowToolTip(
+            self.getRowCount() -1, self._tooltip_from_data(data))
     
     def _broadcast_removed(self, index):
         self.data_model.removeRow(index)
@@ -73,7 +71,8 @@ class Rows(object):
             data
         )
         for i, d in enumerate(data):
-            data_model.updateRowToolTip(i + index, self._tooltip_from_data(d))
+            data_model.updateRowToolTip(
+                i + index, self._tooltip_from_data(d))
     
     def reserve_watch(self, cell):
         """ Reserve to add watch. Reserved cells are added by add_reserved method. """
@@ -86,8 +85,10 @@ class Rows(object):
         if self._reserved:
             n = len(self._rows)
             self._rows[n:n + len(self._reserved)] = self._reserved
-            self._names.update([row.get_header() for row in self._reserved])
-            self._broadcast_reserved_added(len(self._rows) - len(self._reserved), self._reserved)
+            self._names.update(
+                [row.get_header() for row in self._reserved])
+            self._broadcast_reserved_added(
+                len(self._rows) - len(self._reserved), self._reserved)
         self._reserved[:] = []
     
     
@@ -128,8 +129,9 @@ class Rows(object):
     def update_watch(self, row):
         """ Force to update specific row. """
         try:
-            i = self._rows.index(row)
+            i = self._rows.index(row) # ToDo make this faster
             self._broadcast_changed(i, row)
+            # ToDo update input line if selected in the view
         except Exception as e:
             print("update_watch: %s" % str(e))
     
@@ -184,7 +186,9 @@ class GridRow(unohelper.Base, XModifyListener):
             try:
                 addr2 = other.getCellAddress()
                 addr1 = self.cell.getCellAddress()
-                return addr1.Sheet == addr2.Sheet and addr1.Row == addr2.Row and addr1.Column == addr2.Column
+                return addr1.Sheet == addr2.Sheet and \
+                    addr1.Row == addr2.Row and \
+                    addr1.Column == addr2.Column
             except: pass
         return False
     
@@ -231,7 +235,11 @@ class GridRow(unohelper.Base, XModifyListener):
             if sheet_name.startswith("'"):
                 sheet_name = sheet_name[1:len(sheet_name)-1].replace("''", "'")
             
-            return (sheet_name, addr[n + 1:].replace("$", ""), self.cell.getString(), self.cell.getFormula() if self.cell.getType() == CCT_FORMULA else "")
+            return (
+                sheet_name, addr[n + 1:].replace("$", ""), 
+                self.cell.getString(), 
+                self.cell.getFormula() if self.cell.getType() == CCT_FORMULA else ""
+            )
         else:
             return ("", "", "internal", "error")
     

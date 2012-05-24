@@ -28,12 +28,10 @@ def create_control(ctx, control_type, x, y, width, height, names, values, model_
     return ctrl
 
 
-def create_container(ctx, parent, names, values, fit=True):
+def create_container(ctx, parent, names, values):
     """ create control container. """
     cont = create_control(ctx, "UnoControlContainer", 0, 0, 0, 0, names, values)
     cont.createPeer(parent.getToolkit(), parent)
-    #if fit:
-    #   cont.setPosSize()
     return cont
 
 

@@ -8,3 +8,5 @@ RES_FILE = "strings"
 DIALOG_DIR = "%sdialogs/" % EXT_DIR
 
 CONFIG_NODE = "/mytools.calc.WatchWindow/Settings"
+
+RESOURCE_NAME = "private:resource/toolpanel/mytools.calc/WatchWindow"
