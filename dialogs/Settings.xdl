@@ -6,7 +6,7 @@
   <dlg:text dlg:id="label_warn" dlg:tab-index="1" dlg:left="5" dlg:top="17" dlg:width="110" dlg:height="18" dlg:value="Warn if number of cells are going to add." dlg:multiline="true"/>
   <dlg:numericfield dlg:id="num_AddCells" dlg:tab-index="2" dlg:left="118" dlg:top="18" dlg:width="37" dlg:height="13" dlg:decimal-accuracy="0" dlg:value-min="1" dlg:spin="true" dlg:repeat="50"/>
   <dlg:fixedline dlg:id="line2" dlg:tab-index="3" dlg:left="4" dlg:top="43" dlg:width="152" dlg:height="10" dlg:value="Default Settings"/>
-  <dlg:checkbox dlg:id="check_InputLine" dlg:tab-index="5" dlg:left="4" dlg:top="60" dlg:width="145" dlg:height="10" dlg:value="Show input line" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="check_InputLine" dlg:tab-index="4" dlg:left="5" dlg:top="60" dlg:width="145" dlg:height="10" dlg:value="Show input line" dlg:checked="false"/>
   <dlg:checkbox dlg:id="check_StoreWatches" dlg:tab-index="5" dlg:left="5" dlg:top="75" dlg:width="145" dlg:height="10" dlg:value="Store watches" dlg:checked="false"/>
   <dlg:button dlg:id="btn_ok" dlg:tab-index="6" dlg:left="75" dlg:top="106" dlg:width="38" dlg:height="14" dlg:value="~OK" dlg:button-type="ok"/>
   <dlg:button dlg:id="btn_cancel" dlg:tab-index="7" dlg:left="116" dlg:top="106" dlg:width="38" dlg:height="14" dlg:value="~Cancel" dlg:button-type="cancel"/>
