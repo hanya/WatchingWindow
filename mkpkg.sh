@@ -14,5 +14,5 @@ zip -9 -o $NAME-$VERSION.oxt \
   resources/* \
   help/**/* help/**/**/* \
   watchingwindow.py \
-  LICENSE CHANGES NOTICE Translators.txt
+  LICENSE CHANGES NOTICE 
 
