@@ -224,7 +224,8 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
         from pyww.dialogs import AboutDialog
         from helper import get_package_info, get_text_content
         name, version = get_package_info(self.ctx, EXT_ID)
-        text = get_text_content(self.ctx, EXT_DIR + "Translators.txt")
+        text = get_text_content(self.ctx, EXT_DIR + "LICENSE")
+        text = "\n".join(text.split("\n")[20:])
         
         AboutDialog(self.ctx, self.res, 
             name=name, version=version, text=text, 
