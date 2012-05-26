@@ -134,13 +134,16 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
             return data_model.getRowHeading(index)
         return ""
     
-    # XEventListener
-    def disposing(self, ev):
+    def dispose(self):
         self.cont = None
         self.model = None
         self.grid = None
         self.res = None
         self._context_menu = None
+    
+    # XEventListener
+    def disposing(self, ev):
+        pass
     
     # XMouseListener
     def mouseEntered(self, ev): pass

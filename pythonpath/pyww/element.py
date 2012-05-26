@@ -22,8 +22,8 @@ class WatchingWindowUIElement(unohelper.Base, XUIElement, XToolPanel, XComponent
     
     # XComponent
     def dispose(self):
-        self.view.disposing()
-        self.model.disposing()
+        self.view.dispose()
+        self.model.dispose()
         self.view = None
         self.model = None
     

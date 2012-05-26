@@ -36,7 +36,7 @@ class WatchingWindow(object):
         threading.Timer(0.3, self.view.focus_to_doc).start()
         threading.Timer(0.8, self._init).start()
     
-    def disposing(self):
+    def dispose(self):
         self.rows.clear()
         self.rows = None
         self.ctx = None
