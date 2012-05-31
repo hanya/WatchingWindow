@@ -158,7 +158,7 @@ class WatchingWindow(object):
             name = self.rows.get(index).get_header()
             self.rows.remove_watch(index)
             self.update_buttons_state()
-            self.view.update_view()
+            self.view.update_view(1)
             # select same row or last row
             if self.rows.getRowCount() <= index:
                 index -= 1

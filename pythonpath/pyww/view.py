@@ -425,9 +425,11 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
         spinner.setVisible(False)
         spinner.stopAnimation()
     
-    def update_view(self):
+    def update_view(self, rows=None):
         """ Force redraw the grid. """
-        self.cont.getPeer().invalidate(IS_UPDATE)
+        # ToDo invalidate for rows removed if specified
+        self.cont.getPeer().invalidateRect(
+            self.grid.getPosSize(), IS_UPDATE)
     
     def update_button_state(self, name, state):
         """ Update state of specific button. """
@@ -451,9 +453,9 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
             self.grid.setPosSize(0, self.TOP_MARGIN * 2 + btn_height, 
             0, height - (self.TOP_MARGIN * 2 + btn_height), PS_Y + PS_HEIGHT)
             self.cont.getControl("edit_input").removeFocusListener(self)
+            self.update_view()
         self.cont.getControl("edit_input").setVisible(new_state)
         self.input_line_shown = new_state
-        self.update_view()
     
     # XWindowListener
     def windowMoved(self, ev): pass
