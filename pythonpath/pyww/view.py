@@ -222,7 +222,7 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
     def cmd_about(self):
         from pyww import EXT_ID, EXT_DIR
         from pyww.dialogs import AboutDialog
-        from helper import get_package_info, get_text_content
+        from pyww.helper import get_package_info, get_text_content
         name, version = get_package_info(self.ctx, EXT_ID)
         text = get_text_content(self.ctx, EXT_DIR + "LICENSE")
         text = "\n".join(text.split("\n")[20:])
@@ -254,7 +254,7 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
         try:
             self.update_buttons_state()
             self.update_input_line()
-        except Exception, e:
+        except Exception as e:
             print(e)
     
     # XFocusListener

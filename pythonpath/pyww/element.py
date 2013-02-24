@@ -15,7 +15,7 @@ class WatchingWindowUIElement(unohelper.Base, XUIElement, XToolPanel, XComponent
             self.view = WatchingWindowView(
                 ctx, self.model, frame, parent)
             self.model.set_view(self.view)
-        except Exception, e:
+        except Exception as e:
             print(e)
             import traceback
             traceback.print_exc()

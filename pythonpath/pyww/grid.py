@@ -110,7 +110,7 @@ class Rows(object):
                 self._names.remove(row.get_header())
                 row.removed()
                 self._broadcast_removed(index)
-            except Exception, e:
+            except Exception as e:
                 print("remove_watch: %s" % str(e))
     
     def remove_all_watch(self):

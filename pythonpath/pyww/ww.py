@@ -125,7 +125,7 @@ class WatchingWindow(object):
                         raise StopIteration()
         except StopIteration:
             pass
-        except Exception, e:
+        except Exception as e:
             print(e)
         rows.add_reserved()
         self.watch_add_list(names)
@@ -252,7 +252,7 @@ class WatchingWindow(object):
                             rows.add_reserved()
                             n = 0
                         
-                except Exception, e:
+                except Exception as e:
                     print(e)
                 if self._stop_iteration:
                     raise StopIteration()
