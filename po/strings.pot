@@ -27,7 +27,7 @@ msgid "Settings"
 msgstr ""
 
 #: id.label.warn
-msgid "Warn if number of cells are going to add."
+msgid "Warn if the number of cells to add is higher than setting."
 msgstr ""
 
 #: id.title.settings
