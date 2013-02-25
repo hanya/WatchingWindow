@@ -1,4 +1,3 @@
-
 Watching window extension provides you to check value change of 
 cells on a spreadsheet. 
 
@@ -6,13 +5,13 @@ cells on a spreadsheet.
 Choose View - Task Pane from the main menu if Task Pane item is not 
 shown on your work space. Choose Watching Window section from the task pane 
 to open watching window. If you can not find Watching Window section on it, 
-click View and select Watch Window check box. 
+click View and select Watching Window check box. 
 When you can not see Watching Window menu in the popup menu, 
 the extension installation may be broken, re-install it. 
 
-If you calculate and it makes changing the value of the watching cell 
-some times, remove the entry from the list or hide the watching window. 
-If the watching window is hidden state, any changes are not checked. 
+If you calculate and it makes changing the value of the watching cell too
+many times, remove the entry from the list or hide the watching window. 
+If the watching window is in hidden state, any changes are not checked. 
 See Docking the window for the way to hide the window. 
 
 === Close Watching Window ===
@@ -42,11 +41,11 @@ If you want to remove all watch, click Option and choose Clear
 from the popup menu. 
 
 === Update All ===
-If the watching entry shows apparently different value from the 
-original cell, click Update All button. For example, the extension 
-does not check renaming the sheet and you have to update entries 
-after the renaming. However, when the watching cell is updated before 
-you update manually, the watching cell shows collect value automatically. 
+If the watching entry shows apparently different value from the original
+cell, click Update All button. For example, the extension does not check
+renaming the sheet and you have to update entries after the renaming.
+However, the watching cell shows the last automatically collected
+value, if any, before you update manually.
 
 === Move cursor to the watching cell ===
 To show the watched cell on the workspace, select a entry from 
@@ -66,15 +65,15 @@ and push enter key to apply the new value.
 
 == Setting ==
 Click Option button and choose Settings... and then shows dialog 
-to configure Watch window. 
+to configure Watching window. 
 
-=== Warn if some cells are going to be added ===
-If you try to add some watching cell at a time, the extension confirm 
-to add them all. Default value is 10. 
+=== Warn if too many cells are going to be added ===
+If you try to add some watching cells at a time in a number higher than setting,
+the extension ask for confirmation to add them all. Default value is 10. 
 
 === Show input line ===
 If the check box is checked, the Input Line is shown at the starting time. 
 
 === Store watches ===
-If the office supports RDF on ODS file format, list of watches 
+If the target office supports RDF on ODS file format, list of watches 
 can be stored in the current document.
