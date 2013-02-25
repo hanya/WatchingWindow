@@ -1,0 +1,1 @@
+Le permite monitorizar el valor o la fórmula de determinadas celdas de la\nhoja de cálculo.
