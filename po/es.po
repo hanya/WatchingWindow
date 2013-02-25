@@ -1,0 +1,131 @@
+# 
+# Translators:
+#  <strelnic@gmail.com>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: WatchingWindow\n"
+"Report-Msgid-Bugs-To: https://github.com/hanya/WatchingWindow/issues\n"
+"POT-Creation-Date: 2012-03-31 15:43+0200\n"
+"PO-Revision-Date: 2013-02-25 04:52+0000\n"
+"Last-Translator: strel <strelnic@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Accelerator-Marker: ~\n"
+"X-Generator: Translate Toolkit 1.9.0\n"
+
+#: id.label.ww
+msgid "Watching Window"
+msgstr "Watching Window (ventana de observación)"
+
+#: id.extension.description
+msgid ""
+"Provides you to check the value or the formula of a cell on the spreadsheet."
+msgstr "Le permite monitorizar el valor o la fórmula de determinadas celdas de la\nhoja de cálculo."
+
+#: id.label.settings
+msgid "Settings"
+msgstr "Preferencias"
+
+#: id.label.warn
+msgid "Warn if number of cells are going to add."
+msgstr "Advertir si el número de celdas a añadir de una vez supera el valor fijado."
+
+#: id.title.settings
+msgid "Watching Window Settings"
+msgstr "Preferencias de Watching Window"
+
+#: id.label.default
+msgid "Default Settings"
+msgstr "Preferencias predeterminadas"
+
+#: id.label.inputline
+msgid "Show input line"
+msgstr "Mostrar línea de entrada"
+
+#: id.label.store
+msgid "Store watches"
+msgstr "Almacenar observaciones"
+
+#: id.label.about
+msgid "About"
+msgstr "Acerca de"
+
+#: id.label.ok
+msgid "~OK"
+msgstr "~Aceptar"
+
+#: id.label.cancel
+msgid "~Cancel"
+msgstr "~Cancelar"
+
+#: id.label.help
+msgid "~Help"
+msgstr "~Ayuda"
+
+#: id.inputline
+msgid "Input line"
+msgstr "Línea de entrada"
+
+#: id.clear
+msgid "Clear"
+msgstr "Limpiar"
+
+#: id.down
+msgid "Down"
+msgstr "Abajo"
+
+#: id.updateall
+msgid "Update All"
+msgstr "Actualizar todo"
+
+#: id.gotocell
+msgid "Go to Cell"
+msgstr "Ir a la celda"
+
+#: id.up
+msgid "Up"
+msgstr "Arriba"
+
+#: id.value
+msgid "Value"
+msgstr "Valor"
+
+#: id.confirmcells
+msgid "Do you want to add %s cells?"
+msgstr "¿Quiere añadir %s celdas?"
+
+#: id.remove
+msgid "Remove"
+msgstr "Eliminar "
+
+#: id.cell
+msgid "Cell"
+msgstr "Celda"
+
+#: id.settings
+msgid "Settings..."
+msgstr "Preferencias..."
+
+#: id.add
+msgid "Add"
+msgstr "Añadir"
+
+#: id.goto
+msgid "Go to"
+msgstr "Ir a"
+
+#: id.formula
+msgid "Formula"
+msgstr "Fórmula"
+
+#: id.sheet
+msgid "Sheet"
+msgstr "Hoja de cálculo"
+
+#: id.option
+msgid "Option"
+msgstr "Opciones"

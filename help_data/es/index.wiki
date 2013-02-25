@@ -1,0 +1,85 @@
+
+La extensión Watching Window (ventana de observación) le permite
+monitorizar cambios en el valor de determinadas celdas de una hoja de
+cálculo. 
+
+== Uso ==
+Seleccione Ver - Panel de Tareas desde el menú principal si el elemento
+Panel de Tareas no se muestra en su espacio de trabajo. Elija la sección
+Watching Window (ventana de observación) del panel de tareas para
+abrirlo. Si no puede encontrar ahí la sección Watching Window, haga clic
+en Ver y seleccione la casilla Watching Window. Cuando no pueda
+ver el elemento Watching Window en el menú desplegable, la instalación
+de la extensión puede estar estropeada, reinstálela. 
+
+Si al realizar cálculos esto hace que cambie con demasiada frecuencia
+el valor de la celda en observación, elimine la entrada de la lista u oculte
+la ventana de observación. Si la ventana de observación se encuentra
+escondida, ningún cambio se chequea. Vea en 'Acoplar la ventana' la
+forma de esconder la ventana. 
+
+=== Cerrar Watching Window ===
+Haga clic en la x de la esquina superior derecha del panel de tareas. 
+
+=== Desacoplar la ventana ===
+Presione la tecla Ctrl y haga doble clic en el espacio vacío entre 'Tareas' y
+'Ver' en el panel de tareas. Si la ventana del 'Panel de tareas' está acoplada
+en un lado de la ventana de Calc, los botones 'Esconder' y 'Visible' se
+mostrarán en el separador entre el área de trabajo y el panel de tareas.
+Haga clic sobre ellos para cambiar la visibilidad del panel de tareas. 
+
+=== Acoplar la ventana ===
+Presione la tecla Ctrl y haga doble clic en el espacio vacío entre 'Tareas'
+y 'Ver' en el panel de tareas. La ventana del 'Panel de tareas' será
+acoplada en su posición original 
+
+=== Añadir nueva celda en observación ===
+Seleccione una celda, un rango de celdas o una colección de rangos de
+celdas de la hoja de cálculo, cuyo valor o fórmula quiera observar; y luego
+pulse el botón 'Añadir' del panel de tareas de Watching Window.
+ 
+
+=== Eliminar celda en observación ===
+Escoja una de las entradas de observación de celdas, haga clic en el
+botón Eliminar de la ventana de Watching Window. Si quiere eliminar toda observación, haga clic en 'Opciones' y elija 'Limpiar' en el menú desplegable. 
+
+=== Actualizar todo ===
+Si la entrada para observación aparentemente muestra un valor diferente
+del de la celda original, haga clic en el botón 'Actualizar todo'. Por
+ejemplo, la extensión no comprueba el renombrado de la hoja, así que
+usted tiene que actualizar las entradas después de ello. No obstante, la
+celda en observación muestra el último valor recogido automáticamente,
+si hubo alguno, antes de que usted la actualizase manualmente.. 
+
+=== Mover el cursor a la celda en observación ===
+Para mostrar la celda observada en el espacio de trabajo, seleccione una
+entrada desde la lista de observación y haga click en el botón 'Ir a la celda'.
+También puede ir a la celda usando 'Ir a la celda' desde el menú contextual
+de la tabla. Más fácilmente, haga doble-clic en la entrada para ir a la celda. 
+
+=== Limpiar lista de observación ===
+Para eliminar todas las entradas de la lista de observación, haga click en
+el botón 'Opciónes' y escoja 'Limpiar' desde el menú emergente. 
+
+== Línea de entrada ==
+Si comprueba el elemento 'Línea de entrada' en el menú 'Opciones',
+debe ver el cuadro de edición bajo los botones de la ventana de Watching
+Window. Puede modificar el contenido de la entrada seleccionada de la
+lista. Edite el contenido en el cuadro de edición y pulse la tecla Intro para
+aplicar el nuevo valor. 
+
+== Configuración ==
+Haga clic en el botón 'Opciones' y elija 'Preferencias'... entonces se
+muestrará un cuadro para configurar la ventana de Watching Window. 
+
+=== Advertir si demasiadas celdas van a ser añadidas ===
+Si intenta añadir varias celdas a observación en una cifra superior al valor
+configurado, la extensión pide confirmación. El valor predeterminado es 10. 
+
+=== Mostrar línea de entrada ===
+Si la casilla de verificación está marcada, la 'Línea de entrada' se muestra
+al momento del inicio. 
+
+=== Almacenar observaciones ===
+Si el programa de oficina destinatario soporta formatos de archivo RDF o
+ODS, la lista de observaciones puede ser guardada en el documento actual.
