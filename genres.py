@@ -25,7 +25,25 @@ xmlns:d="http://openoffice.org/extensions/description/2006">
 <extension-description>
 {DESCRIPTIONS}
 </extension-description>
+<update-information>
+<src xlink:href="https://raw.github.com/hanya/WatchingWindow/master/files/WatchingWindow.update.xml"/>
+</update-information>
 </description>"""
+
+update_feed = """<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/update/2006" 
+xmlns:xlink="http://www.w3.org/1999/xlink"
+xmlns:d="http://openoffice.org/extensions/description/2006">
+<identifier value="mytools.calc.WatchWindow" />
+<version value="{VERSION}" />
+<dependencies>
+<d:OpenOffice.org-minimal-version value="3.4" d:name="OpenOffice.org 3.4" />
+</dependencies>
+<update-download>
+<src xlink:href="https://github.com/downloads/hanya/WatchingWindow/WatchingWindow-{VERSION}.oxt"/>
+</update-download>
+</description>
+"""
 
 
 def genereate_description(d):
@@ -182,6 +200,11 @@ def write_resource(res_path, d):
         f.write("# comment\n")
         f.write(lines.encode("utf-8"))
 
+def write_update_feed():
+    version = read_version()
+    s = update_feed.format(VERSION=version)
+    with open("./files/WatchingWindow.update.xml", "w") as f:
+        f.write(s.encode("utf-8"))
 
 def main():
     prefix = "strings_"
@@ -214,6 +237,8 @@ def main():
     s = genereate_description(locales)
     with open("description.xml", "w") as f:
         f.write(s)#.encode("utf-8"))
+    
+    write_update_feed()
 
 
 if __name__ == "__main__":

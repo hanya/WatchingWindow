@@ -22,4 +22,7 @@ xmlns:d="http://openoffice.org/extensions/description/2006">
 <src lang="en-US" xlink:href="descriptions/desc_en-US.txt"/>
 <src lang="ja" xlink:href="descriptions/desc_ja.txt"/>
 </extension-description>
+<update-information>
+<src xlink:href="https://raw.github.com/hanya/WatchingWindow/master/files/WatchingWindow.update.xml"/>
+</update-information>
 </description>
