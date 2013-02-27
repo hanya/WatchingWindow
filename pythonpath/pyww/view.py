@@ -6,7 +6,6 @@ from com.sun.star.awt import XWindowListener, XKeyHandler, \
 from com.sun.star.awt.grid import XGridSelectionListener, XGridRowSelection
 from com.sun.star.view.SelectionType import SINGLE as ST_SINGLE
 from com.sun.star.style.HorizontalAlignment import RIGHT as HA_RIGHT
-from com.sun.star.awt.PopupMenuDirection import EXECUTE_DEFAULT as PMD_EXECUTE_DEFAULT
 from com.sun.star.awt import Rectangle
 from com.sun.star.awt.MouseButton import LEFT as MB_LEFT, RIGHT as MB_RIGHT
 from com.sun.star.awt.Key import RETURN as K_RETURN
@@ -22,7 +21,7 @@ from com.sun.star.beans.PropertyState import DIRECT_VALUE as PS_DIRECT_VALUE
 
 from pyww.settings import Settings
 from pyww.helper import create_control, create_container, create_controls, \
-    get_backgroundcolor, create_popup, MenuEntry
+    get_backgroundcolor, PopupMenuWrapper, MenuEntry, messagebox
 
 
 class CurrentStringResource(object):
@@ -323,7 +322,7 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
         _ = self.res.get
         popup = self._context_menu
         if popup is None:
-            popup = create_popup(self.ctx, 
+            popup = PopupMenuWrapper(self.ctx, 
                 (
                     MenuEntry(_("Go to Cell"), 4, 0, "goto"), 
                     MenuEntry(_("Go to"), 6, 1, "gotocell"), 
@@ -342,7 +341,7 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
                 if refs:
                     popup.setPopupMenu(
                         6, 
-                        create_popup(
+                        PopupMenuWrapper(
                             self.ctx, 
                             [MenuEntry(ref, i + 1000, i, "") 
                                 for i, ref in enumerate(refs)], 
@@ -357,8 +356,7 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
             ps = self.grid.getPosSize()
             n = popup.execute(
                     self.cont.getPeer(), 
-                    Rectangle(x + ps.X, y + ps.Y, 0, 0), 
-                    PMD_EXECUTE_DEFAULT)
+                    x + ps.X, y + ps.Y)
             if n > 0 and n < 1000:
                 self.execute_cmd(popup.getCommand(n))
             elif n >= 1000:
@@ -368,7 +366,7 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
     def option_popup(self, x, y):
         """ Show popup menu for option button. """
         _ = self.res.get
-        popup = create_popup(self.ctx, 
+        popup = PopupMenuWrapper(self.ctx, 
             (
                 MenuEntry(_("Clear"), 32, 0, "clear"), 
                 MenuEntry("", -1, 1, ""), 
@@ -383,19 +381,14 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
         popup.checkItem(2048, self.model.store_watches)
         
         n = popup.execute(
-                self.cont.getPeer(), Rectangle(x, y, 0, 0), PMD_EXECUTE_DEFAULT)
+                self.cont.getPeer(), x, y)
         if n > 0:
             self.execute_cmd(popup.getCommand(n))
     
-    
     def messagebox(self, message, title, message_type, buttons):
         """ Show message in message box. """
-        parent = self.frame.getContainerWindow()
-        msgbox = parent.getToolkit().createMessageBox(
-            parent, Rectangle(), message_type, buttons, title, message)
-        n = msgbox.execute()
-        msgbox.dispose()
-        return n
+        return messagebox(self.ctx, self.frame.getContainerWindow(), 
+            message, title, message_type, buttons)
     
     def message(self, message, title):
         """ Shows message with title. """

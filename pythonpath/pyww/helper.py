@@ -1,4 +1,5 @@
 
+import uno
 import unohelper
 
 from com.sun.star.awt.PosSize import POSSIZE as PS_POSSIZE
@@ -220,6 +221,21 @@ def get_text_content(ctx, file_url, encoding="utf-8"):
             pass
     return None
 
+
+def check_method_parameter(ctx, interface_name, method_name, param_index, param_type):
+    """ Check the method has specific type parameter at the specific position. """
+    cr = create_service(ctx, "com.sun.star.reflection.CoreReflection")
+    try:
+        idl = cr.forName(interface_name)
+        m = idl.getMethod(method_name)
+        if m:
+            info = m.getParameterInfos()[param_index]
+            return info.aType.getName() == param_type
+    except:
+        pass
+    return False
+
+
 from com.sun.star.awt.MenuItemStyle import CHECKABLE as MIS_CHECKABLE
 
 class MenuEntry(object):
@@ -244,6 +260,60 @@ def create_popup(ctx, items, hide_disabled=False):
             popup.insertItem(item.id, item.label, item.style, item.position)
             popup.setCommand(item.id, item.command)
     return popup
+
+from com.sun.star.awt import Point, Rectangle
+from com.sun.star.awt.PopupMenuDirection import EXECUTE_DEFAULT as PMD_EXECUTE_DEFAULT
+
+class PopupMenuWrapper(object):
+    """ Wrapps popup menu for compatibility. """
+    
+    def __init__(self, ctx, items, hide_disabled=False):
+        self._popup = create_popup(ctx, items, hide_disabled)
+        self._use_point = check_method_parameter(
+            ctx, "com.sun.star.awt.XPopupMenu", "execute", 
+            1, "com.sun.star.awt.Point")
+    
+    def execute(self, peer, x, y, direction=PMD_EXECUTE_DEFAULT):
+        if self._use_point:
+            pos = Point(x, y)
+        else:
+            pos = Rectangle(x, y, 0, 0)
+        return self._popup.execute(peer, pos, direction)
+    
+    def getCommand(self, id):
+        return self._popup.getCommand(id)
+    
+    def setPopupMenu(self, id, sub_popup):
+        if isinstance(sub_popup, PopupMenuWrapper):
+            sub_popup = sub_popup._popup
+        self._popup.setPopupMenu(id, sub_popup)
+    
+    def checkItem(self, id, state):
+        self._popup.checkItem(id, state)
+    
+    def enableItem(self, id, state):
+        self._popup.enableItem(id, state)
+
+
+def messagebox(ctx, parent, message, title, message_type, buttons):
+    """ Show message in message box. """
+    toolkit = parent.getToolkit()
+    older_imple = check_method_parameter(
+        ctx, "com.sun.star.awt.XMessageBoxFactory", "createMessageBox", 
+        1, "com.sun.star.awt.Rectangle")
+    if older_imple:
+        msgbox = toolkit.createMessageBox(
+            parent, Rectangle(), message_type, buttons, title, message)
+    else:
+        message_type = uno.getConstantByName("com.sun.star.awt.MessageBoxType." + {
+            "messbox": "MESSAGEBOX", "infobox": "INFOBOX", 
+            "warningbox": "WARNINGBOX", "errorbox": "ERRORBOX", 
+            "querybox": "QUERYBOX"}[message_type])
+        msgbox = toolkit.createMessageBox(
+            parent, message_type, buttons, title, message)
+    n = msgbox.execute()
+    msgbox.dispose()
+    return n
 
 
 from com.sun.star.sheet import SingleReference, ComplexReference
