@@ -1,0 +1,59 @@
+
+L'extension Watching window vous permet de surveiller les changements de valeurs (ou de formules) des cellules d'un classeur.  
+
+== Utilisation ==
+Choisir le menu Affichage > Volet de tâches si le volet ne s'affiche pas dans l'espace de travail. Déroulez éventuellement la section du volet Surveillance feuille pour en afficher les options.
+Si vous ne voyez pas cette section du volet, l'installation de 
+l'extension est peut être corrompue, tentez une réinstallation. 
+
+En cas de calcul, les changements de valeur de la cellule peuvent être observés. Si la fenêtre est masquée, les modifications ne sont pas vérifiées. Voir aussi Ancrer le volet et la façon de masquer la fenêtre.  
+
+=== Fermeture ===
+Cliquez sur le x en haut à droite du volet pour le fermer.  
+
+=== Détacher le volet ===
+Appuyez sur la touche Ctrl et double cliquez sur l'espace libre juste
+au dessus du volet de tâches. Une fois le volet détaché, il est déplaçable sur l'ensemble de l'espace de travail en pointant sur la barre titre.  
+
+=== Ancrer le volet ===
+Appuyez sur la touche Ctrl et double cliquez sur l'espace libre juste
+en dessous de la barre titre du volet. Le volet va alors s'ancrer à sa
+position originelle. 
+
+=== Ajout d'une cellule à surveiller ===
+Sélectionnez une cellule ou une plage de cellules à surveiller et 
+cliquez sur le bouton Ajout (la loupe) pour ajouter celles-ci dans la liste du volet.  
+
+=== Supprimer une cellule à surveiller ===
+Sélectionnez la ligne de la cellule surveillée puis cliquez sur le bouton Supprimer de la barre d'outils. Si vous souhaitez arrêter toutes les surveillances, cliquez sur le bouton Option et choisissez l'item Effacer dans le menu contextuel. 
+
+=== Tout mettre à jour ===
+Si la liste surveillée montre des différences de valeur avec les 
+cellules d'origine, cliquez sur le bouton Tout mettre à jour.
+Ainsi, l'extension ne vérifie pas en permanence qu'une feuille est 
+renommée.  
+
+=== Déplacement du curseur vers la cellule ===
+Pour voir une cellule surveillée sur la feuille, sélectionnez une 
+des entrées de la liste et cliquez sur le bouton Aller à.
+Vous pouvez aussi vous déplacer rapidement par un double clic sur l'entrée de la liste ou utiliser le menu contextuel (clic droit puis 
+item Aller à la cellule).  
+
+=== Effacer toute la liste de surveillance ===
+Pour supprimer toutes les entrées de la liste de surveillance, cliquez sur le bouton Option (tout à droite) et choisissez l'item Effacer dans le menu contextuel. 
+
+== Ligne de saisie ==
+Vous pouvez modifier le contenu d'une cellule en utilisant la ligne 
+de saisie (si vous avez coché la case dans les paramètres). 
+
+== Paramétrage ==
+Cliquez sur le bouton Option (tout à droite) et choisissez Paramètres... Un dialogue apparaît pour vous permettre de paramétrer la surveillance.  
+
+=== Avertir lors d'ajout de cellules ===
+Une demande de confirmation vous est demandé si vous tentez d'ajouter un nombre de cellules supérieur à ce qui est paramétré (par défaut 10). 
+
+=== Afficher la ligne de saisie ===
+Si la case est cochée, la ligne de saisie est affiché à chaque démarrage.  
+
+=== Stocker les surveillances ===
+Si le format ODS supporte le RDF, la liste des surveillances peut être enregistré dans le classeur courant.
