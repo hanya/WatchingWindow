@@ -30,11 +30,13 @@
 <item lang="ja" title="ウォッチングウィンドウ"/>
 <item lang="ru" title="Окно наблюдения"/>
 <item lang="es" title="Watching Window (ventana de observación)"/>
+<item lang="fr" title="Surveillance feuille"/>
 <page file_name="index">
 <item lang="en" name="index" page_title="Watching Window" title="Watching Window"/>
 <item lang="ja" name="index" page_title="ウォッチングウィンドウ" title="ウォッチングウィンドウ"/>
 <item lang="ru" name="index" page_title="Окно наблюдения" title="Окно наблюдения"/>
 <item lang="es" name="index" page_title="Watching Window (ventana de observación)" title="Watching Window (ventana de observación)"/>
+<item lang="fr" name="index" page_title="Surveillance feuille" title="Surveillance feuille"/>
 </page>
 </node>
 </pages>

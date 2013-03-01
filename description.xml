@@ -3,7 +3,7 @@
 xmlns:xlink="http://www.w3.org/1999/xlink"
 xmlns:d="http://openoffice.org/extensions/description/2006">
 <identifier value="mytools.calc.WatchWindow" />
-<version value="0.4.2" />
+<version value="0.4.3" />
 <dependencies>
 <OpenOffice.org-minimal-version value="3.4" d:name="OpenOffice.org 3.4" />
 </dependencies>
@@ -14,12 +14,14 @@ xmlns:d="http://openoffice.org/extensions/description/2006">
 </registration>
 <display-name>
 <name lang="ru">Окно наблюдения</name>
+<name lang="fr">Surveillance feuille</name>
 <name lang="en-US">Watching Window</name>
 <name lang="ja">ウォッチウィンドウ</name>
 <name lang="es">Watching Window (ventana de observación)</name>
 </display-name>
 <extension-description>
 <src lang="ru" xlink:href="descriptions/desc_ru.txt"/>
+<src lang="fr" xlink:href="descriptions/desc_fr.txt"/>
 <src lang="en-US" xlink:href="descriptions/desc_en-US.txt"/>
 <src lang="ja" xlink:href="descriptions/desc_ja.txt"/>
 <src lang="es" xlink:href="descriptions/desc_es.txt"/>

@@ -10,6 +10,7 @@
 <prop oor:name="UIName">
 <value xml:lang="en-US">Watching Window</value>
 <value xml:lang="es">Watching Window (ventana de observación)</value>
+<value xml:lang="fr">Surveillance feuille</value>
 <value xml:lang="ja">ウォッチウィンドウ</value>
 <value xml:lang="ru">Окно наблюдения</value>
 </prop>

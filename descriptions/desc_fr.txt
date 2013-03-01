@@ -1,0 +1,1 @@
+Permet de vérifier la valeur ou formule d'une cellule.
