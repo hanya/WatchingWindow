@@ -40,7 +40,7 @@ xmlns:d="http://openoffice.org/extensions/description/2006">
 <d:OpenOffice.org-minimal-version value="3.4" d:name="OpenOffice.org 3.4" />
 </dependencies>
 <update-download>
-<src xlink:href="https://github.com/downloads/hanya/WatchingWindow/WatchingWindow-{VERSION}.oxt"/>
+<src xlink:href="https://raw.github.com/hanya/WatchingWindow/master/files/WatchingWindow-{VERSION}.oxt"/>
 </update-download>
 </description>
 """
