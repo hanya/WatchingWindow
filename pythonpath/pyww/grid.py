@@ -238,7 +238,8 @@ class GridRow(unohelper.Base, XModifyListener):
             return (
                 sheet_name, addr[n + 1:].replace("$", ""), 
                 self.cell.getString(), 
-                self.cell.getFormula() if self.cell.getType() == CCT_FORMULA else ""
+                self.cell.FormulaLocal if self.cell.getType() == CCT_FORMULA else ""
+                #self.cell.getFormula() if self.cell.getType() == CCT_FORMULA else ""
             )
         else:
             return ("", "", "internal", "error")
@@ -264,11 +265,13 @@ class GridRow(unohelper.Base, XModifyListener):
     
     def get_formula(self):
         """ get formula of the cell. """
-        return self.cell.getFormula()
+        #return self.cell.getFormula()
+        return self.cell.FormulaLocal
     
     def set_formula(self, text):
         """ set formula to the cell. """
-        self.cell.setFormula(text)
+        #self.cell.setFormula(text)
+        self.cell.FormulaLocal = text
     
     # XEventListener
     def disposing(self, ev):

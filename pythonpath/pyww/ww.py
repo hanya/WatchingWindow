@@ -206,7 +206,8 @@ class WatchingWindow(object):
     def get_formula(self, addr):
         cell = self.get_cell_by_name(addr)
         if cell:
-            return cell.getFormula()
+            #return cell.getFormula()
+            return cell.FormulaLocal
         return None
     
     def update_row(self, index, formula):
