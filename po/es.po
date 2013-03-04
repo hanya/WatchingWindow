@@ -31,7 +31,7 @@ msgid "Settings"
 msgstr "Preferencias"
 
 #: id.label.warn
-msgid "Warn if number of cells are going to add."
+msgid "Warn if the number of cells to add is higher than setting."
 msgstr "Advertir si el número de celdas a añadir de una vez supera el valor fijado."
 
 #: id.title.settings
