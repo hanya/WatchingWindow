@@ -26,10 +26,6 @@ msgstr "Provides you to check the value or the formula of a cell on the spreadsh
 msgid "Settings"
 msgstr "Settings"
 
-#: id.label.warn
-msgid "Warn if the number of cells to add is higher than setting."
-msgstr "Warn if the number of cells to add is higher than setting."
-
 #: id.title.settings
 msgid "Watching Window Settings"
 msgstr "Watching Window Settings"
@@ -90,10 +86,6 @@ msgstr "Up"
 msgid "Value"
 msgstr "Value"
 
-#: id.confirmcells
-msgid "Do you want to add %s cells?"
-msgstr "Do you want to add %s cells?"
-
 #: id.remove
 msgid "Remove"
 msgstr "Remove"
@@ -126,3 +118,6 @@ msgstr "Sheet"
 msgid "Option"
 msgstr "Option"
 
+# :id.toomanycells
+msgid "Too many cells are selected."
+msgstr "Too many cells are selected."

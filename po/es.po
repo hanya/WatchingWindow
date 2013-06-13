@@ -19,7 +19,7 @@ msgstr ""
 
 #: id.label.ww
 msgid "Watching Window"
-msgstr "Watching Window (ventana de observación)"
+msgstr "Watching Window"
 
 #: id.extension.description
 msgid ""
@@ -29,10 +29,6 @@ msgstr "Le permite monitorizar el valor o la fórmula de determinadas celdas de 
 #: id.label.settings
 msgid "Settings"
 msgstr "Preferencias"
-
-#: id.label.warn
-msgid "Warn if the number of cells to add is higher than setting."
-msgstr "Advertir si el número de celdas a añadir de una vez supera el valor fijado."
 
 #: id.title.settings
 msgid "Watching Window Settings"
@@ -94,10 +90,6 @@ msgstr "Arriba"
 msgid "Value"
 msgstr "Valor"
 
-#: id.confirmcells
-msgid "Do you want to add %s cells?"
-msgstr "¿Quiere añadir %s celdas?"
-
 #: id.remove
 msgid "Remove"
 msgstr "Eliminar "
@@ -129,3 +121,7 @@ msgstr "Hoja de cálculo"
 #: id.option
 msgid "Option"
 msgstr "Opciones"
+
+# :id.toomanycells
+msgid "Too many cells are selected."
+msgstr "Too many cells are selected."

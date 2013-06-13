@@ -26,10 +26,6 @@ msgstr "Позволяет видеть значения выбранных яч
 msgid "Settings"
 msgstr "Настройки"
 
-#: id.label.warn
-msgid "Warn if the number of cells to add is higher than setting."
-msgstr "Подтверждение при добавлении ячеек, более чем"
-
 #: id.title.settings
 msgid "Watching Window Settings"
 msgstr "Настройки “Окна наблюдения”"
@@ -90,10 +86,6 @@ msgstr "Опустить вниз"
 msgid "Value"
 msgstr "Знач."
 
-#: id.confirmcells
-msgid "Do you want to add %s cells?"
-msgstr "Хотите добавить %s ячеек ?"
-
 #: id.remove
 msgid "Remove"
 msgstr "Удалить"
@@ -126,3 +118,6 @@ msgstr "Лист"
 msgid "Option"
 msgstr "Выбор"
 
+# :id.toomanycells
+msgid "Too many cells are selected."
+msgstr "Too many cells are selected."

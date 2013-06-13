@@ -26,10 +26,6 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: id.label.warn
-msgid "Warn if the number of cells to add is higher than setting."
-msgstr ""
-
 #: id.title.settings
 msgid "Watching Window Settings"
 msgstr ""
@@ -90,10 +86,6 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
-#: id.confirmcells
-msgid "Do you want to add %s cells?"
-msgstr ""
-
 #: id.remove
 msgid "Remove"
 msgstr ""
@@ -126,3 +118,6 @@ msgstr ""
 msgid "Option"
 msgstr ""
 
+# :id.toomanycells
+msgid "Too many cells are selected."
+msgstr ""

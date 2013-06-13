@@ -29,10 +29,6 @@ msgstr "Permet de vérifier la valeur ou formule d'une cellule."
 msgid "Settings"
 msgstr "Paramètres"
 
-#: id.label.warn
-msgid "Warn if the number of cells to add is higher than setting."
-msgstr "Avertir si le nombre de cellules devant être ajoutée est supérieur."
-
 #: id.title.settings
 msgid "Watching Window Settings"
 msgstr "Paramètres de surveillance"
@@ -93,10 +89,6 @@ msgstr "Haut"
 msgid "Value"
 msgstr "Valeur"
 
-#: id.confirmcells
-msgid "Do you want to add %s cells?"
-msgstr "Confirmer l'ajout de %s cellules ?"
-
 #: id.remove
 msgid "Remove"
 msgstr "Supprimer"
@@ -128,3 +120,7 @@ msgstr "Feuille"
 #: id.option
 msgid "Option"
 msgstr "Option"
+
+# :id.toomanycells
+msgid "Too many cells are selected."
+msgstr "Too many cells are selected."

@@ -26,10 +26,6 @@ msgstr "Calc シート上のセルの値および数式の変化をチェック�
 msgid "Settings"
 msgstr "設定"
 
-#: id.label.warn
-msgid "Warn if the number of cells to add is higher than setting."
-msgstr "多数のセルを追加するとき警告"
-
 #: id.title.settings
 msgid "Watching Window Settings"
 msgstr "Watching Window 設定"
@@ -90,10 +86,6 @@ msgstr "上へ"
 msgid "Value"
 msgstr "値"
 
-#: id.confirmcells
-msgid "Do you want to add %s cells?"
-msgstr "%s 個のセルを追加しますか？"
-
 #: id.remove
 msgid "Remove"
 msgstr "削除"
@@ -126,3 +118,6 @@ msgstr "シート"
 msgid "Option"
 msgstr "オプション"
 
+# :id.toomanycells
+msgid "Too many cells are selected."
+msgstr "選択されているセルが多すぎます。"
