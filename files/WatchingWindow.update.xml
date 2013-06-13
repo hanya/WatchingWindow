@@ -3,11 +3,12 @@
 xmlns:xlink="http://www.w3.org/1999/xlink"
 xmlns:d="http://openoffice.org/extensions/description/2006">
 <identifier value="mytools.calc.WatchWindow" />
-<version value="0.4.4" />
+<version value="0.5.0" />
 <dependencies>
 <d:OpenOffice.org-minimal-version value="3.4" d:name="OpenOffice.org 3.4" />
+<d:OpenOffice.org-maximal-version value="4.0" d:name="OpenOffice.org 4.0" />
 </dependencies>
 <update-download>
-<src xlink:href="https://raw.github.com/hanya/WatchingWindow/master/files/WatchingWindow-0.4.4.oxt"/>
+<src xlink:href="https://raw.github.com/hanya/WatchingWindow/master/files/WatchingWindow-0.5.0.oxt"/>
 </update-download>
 </description>
