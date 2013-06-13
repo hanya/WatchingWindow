@@ -95,14 +95,12 @@ class SettingsDialog(Dialog):
     
     def _result(self):
         result = {}
-        result["warn_cells"] = int(self.get_value("num_AddCells"))
         result["show_input_line"] = self.get_state("check_InputLine")
         result["store"] = self.get_state("check_StoreWatches")
         return result
     
     def _init(self):
         kwds = self.kwds
-        self.set_value("num_AddCells", kwds["warn_cells"])
         self.set_state("check_InputLine", kwds["show_input_line"])
         self.set_state("check_StoreWatches", kwds["store"])
 

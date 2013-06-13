@@ -5,6 +5,7 @@ from pyww import EXT_ID
 from pyww import grid
 from pyww.settings import Settings, SettingsRDF
 from pyww.helper import get_cell_references
+from pyww.resource import CurrentStringResource
 
 
 class StopIteration(Exception):
@@ -13,142 +14,124 @@ class StopIteration(Exception):
 class WatchingWindow(object):
     """ Watching window model. """
     
-    def __init__(self, ctx):
+    def __init__(self, ctx, frame):
         self.ctx = ctx
-        self.view = None
-        self.rows = None
-        self.rdf = None
-        
+        self.frame = frame
         self._stop_iteration = False
         self._iterating = False
-        
         self.store_watches = False
-        self.load_settings(init=True)
+        
+        res = CurrentStringResource.get(ctx)
+        import pyww.helper
+        # Data model for the grid control will be reused. 
+        # Grid data listeners added by the control that already dead 
+        # are removed by disposed exception thrown by the listeners.
+        data_model = pyww.helper.create_service(
+                        ctx, "com.sun.star.awt.grid.DefaultGridDataModel")
+        self.rows = grid.Rows(data_model, res)
+        self.rdf = SettingsRDF(self.ctx, self.get_doc())
+        self.load_settings()
+        self._init()
     
-    def set_view(self, view):
-        self.view = view
-        self.rdf = SettingsRDF(self.ctx, view.get_doc())
-        if len(self.rdf):
-            self.store_watches = True
-        self.rows = grid.Rows(view.get_data_model(), view.res)
-        self.update_buttons_state()
-        # wait UI creation is finished
-        threading.Timer(0.3, self.view.focus_to_doc).start()
-        threading.Timer(0.8, self._init).start()
+    def get_data_model(self):
+        """ Returns grid data model for the grid control. """
+        return self.rows.get_data_model()
     
     def dispose(self):
+        """ Called when the document model is going to be disposed. """
+        self.stop_iteration()
         self.rows.clear()
         self.rows = None
+        self.frame = None
         self.ctx = None
         self.rdf = None
-        self.view = None
+    
+    def get_doc(self):
+        return self.frame.getController().getModel()
     
     def get_watches_count(self):
         """ Returns number of watches. """
-        return self.rows.getRowCount()
+        return self.rows.get_row_count()
     
-    def load_settings(self, init=False):
+    def load_settings(self):
         """ Load configuration. """
         settings = Settings(self.ctx)
-        self.warn_cells = settings.get("WarnNumberOfCells")
-        if init:
-            self.store_watches = settings.get("StoreWatches")
-    
-    def settings_changed(self):
-        """ Request to load settings. """
-        self.load_settings()
-    
-    def select_entry(self, index):
-        """ select specific entry by index. """
-        self.view.select_entry(index)
-    
-    def update_buttons_state(self):
-        """ request to update buttons state. """
-        self.view.update_buttons_state()
-    
-    def add_entry(self):
-        """ request to add current selected object. """
-        obj = self.view.get_current_selection()
-        if obj.supportsService("com.sun.star.sheet.SheetCell"):
-            self.add_cell(obj)
-        elif obj.supportsService("com.sun.star.sheet.SheetCellRange"):
-            if not self._iterating:
-                threading.Timer(
-                    0.05, self.add_cell_range, args=(obj, False)).start()
-        elif obj.supportsService("com.sun.star.sheet.SheetCellRanges"):
-            self.add_cell_ranges(obj)
-        self.update_buttons_state()
-    
-    
-    def _add_entries_started(self):
-        self.view.enable_add_watch(False)
-        self.view.spinner_start()
-    
-    def _add_entries_finished(self):
-        self.view.enable_add_watch(True)
-        self.view.spinner_stop()
-        self._stop_iteration = False
-        self._iterating = False
+        self.store_watches = settings.get("StoreWatches")
     
     def stop_iteration(self):
         self._stop_iteration = True
+    
+    def get_cells_count(self):
+        """ Returns number of cells in the current selection. """
+        try:
+            obj = self.get_doc().getCurrentSelection()
+            if obj.supportsService("com.sun.star.sheet.SheetCell"):
+                return 1
+            elif obj.supportsService("com.sun.star.sheet.SheetCellRange"):
+                addr = obj.getRangeAddress()
+                return (addr.EndColumn - addr.StartColumn + 1) * \
+                        (addr.EndRow - addr.EndColumn + 1)
+            elif obj.supportsService("com.sun.star.sheet.SheetCellRanges"):
+                count = 0
+                ranges = obj.getRangeAddresses()
+                for addr in ranges:
+                    count += (addr.EndColumn - addr.StartColumn + 1) * \
+                        (addr.EndRow - addr.EndColumn + 1)
+                return count
+        except:
+            return 0
+    
+    def add_entry(self):
+        """ request to add current selected object. """
+        try:
+            obj = self.get_doc().getCurrentSelection()
+        except:
+            return
+        if not obj: return
+        if obj.supportsService("com.sun.star.sheet.SheetCell"):
+            self.add_cell(obj)
+        elif obj.supportsService("com.sun.star.sheet.SheetCellRange"):
+            self.add_cell_range(obj, False)
+        elif obj.supportsService("com.sun.star.sheet.SheetCellRanges"):
+            self.add_cell_ranges(obj)
     
     def add_cell(self, obj, add_to_order=True):
         """ watch cell. """
         n = self.rows.add_watch(obj)
         if add_to_order and self.store_watches:
-            self.watch_added(n)
+            self.rdf_watch_added(n)
     
     def add_cell_range(self, obj, checked=False):
         """ watch all cells in the range. """
         addr = obj.getRangeAddress()
-        if not checked:
-            cells = (addr.EndColumn - addr.StartColumn + 1) * (addr.EndRow - addr.StartRow + 1)
-            if cells >= self.warn_cells and \
-                self.view.confirm_warn_cells(cells) == 0:
-                return
-        self._add_entries_started()
         rows = self.rows
         try:
-            n = 0
             names = []
             for i in range(addr.EndColumn - addr.StartColumn + 1):
                 for j in range(addr.EndRow - addr.StartRow + 1):
                     cell = obj.getCellByPosition(i, j)
                     rows.reserve_watch(cell)
                     names.append(cell.AbsoluteName)
-                    n += 1
-                    if n == 100:
-                        rows.add_reserved()
-                        n = 0
                     if self._stop_iteration:
                         raise StopIteration()
+            rows.add_reserved()
+            self.rdf_watch_add_list(names)
         except StopIteration:
             pass
-        except Exception as e:
-            print(e)
-        rows.add_reserved()
-        self.watch_add_list(names)
-        self._add_entries_finished()
+        except:
+            pass
     
     def add_cell_ranges(self, obj):
         """ Add to watch all cells in the ranges. """
-        cells = 0
         ranges = obj.getRangeAddresses()
-        for addr in ranges:
-            cells += (addr.EndColumn - addr.StartColumn + 1) * (addr.EndRow - addr.StartRow + 1)
-        if cells >= self.warn_cells and \
-            self.view.confirm_warn_cells(cells) == 0:
-            self._iterating = False
-            return
         try:
             enume = obj.createEnumeration()
             while enume.hasMoreElements():
                 self.add_cell_range(enume.nextElement(), True)
                 if self._stop_iteration:
                     raise StopIteration()
-        except StopIteration as e:
-            print(e)
+        except StopIteration:
+            pass
         except:
             pass
     
@@ -157,21 +140,13 @@ class WatchingWindow(object):
         if index >= 0:
             name = self.rows.get(index).get_header()
             self.rows.remove_watch(index)
-            self.update_buttons_state()
-            self.view.update_view(1)
-            # select same row or last row
-            if self.rows.getRowCount() <= index:
-                index -= 1
-            self.select_entry(index)
             if self.store_watches:
-                self.watch_removed(name)
+                self.rdf_watch_removed(name)
     
     def remove_all_entries(self):
         """ Remove all. """
         self.rows.remove_all_watch()
-        self.update_buttons_state()
-        self.view.update_view()
-        self.watch_cleared()
+        self.rdf_watch_cleared()
     
     def update_all(self):
         """ Request to update all. """
@@ -182,16 +157,18 @@ class WatchingWindow(object):
         if up and index > 0:
             n = index -1
             self.rows.exchange_watches(index, n)
-            self.select_entry(n)
-        elif not up and index < (self.rows.getRowCount() - 1):
+        elif not up and index < (self.rows.get_row_count() - 1):
             n = index +1
             self.rows.exchange_watches(index, n)
-            self.select_entry(n)
             
-        self.watch_moved(n)
+        self.rdf_watch_moved(n)
+    
+    def get_address(self, index):
+        """ Returns cell address for specified index. """
+        return self.rows.get_row_header(index)
     
     def get_cell_by_name(self, addr):
-        r = self.view.get_doc().getSheets().getCellRangesByName(addr)
+        r = self.get_doc().getSheets().getCellRangesByName(addr)
         if r:
             return r[0].getCellByPosition(0, 0)
         return None
@@ -200,13 +177,12 @@ class WatchingWindow(object):
         """ get cell references which are used in the formula. """
         cell = self.get_cell_by_name(addr)
         if cell:
-            return get_cell_references(self.view.get_doc(), cell)
+            return get_cell_references(self.get_doc(), cell)
         return None
     
     def get_formula(self, addr):
         cell = self.get_cell_by_name(addr)
         if cell:
-            #return cell.getFormula()
             return cell.FormulaLocal
         return None
     
@@ -214,15 +190,8 @@ class WatchingWindow(object):
         """ update selected row with the formula. """
         if index >= 0:
             row = self.rows.get(index)
-            row.set_formula(formula)
-    
-    def stop_watching(self):
-        """ Stop all watching, when the view is hidden. """
-        self.rows.enable_update(False)
-    
-    def start_watching(self):
-        """ Start all watching, when the view is shown. """
-        self.rows.enable_update(True)
+            if row:
+                row.set_formula(formula)
     
     def switch_store_state(self):
         """ Change store state. """
@@ -236,11 +205,9 @@ class WatchingWindow(object):
         self.rdf.load()
         if not len(self.rdf):
             return
-        self._add_entries_started()
         n = 0
         rows = self.rows
-        model = self.view.get_doc()
-        sheets = model.getSheets()
+        sheets = self.get_doc().getSheets()
         try:
             for name in self.rdf.order:
                 try:
@@ -252,35 +219,40 @@ class WatchingWindow(object):
                         if n == 100:
                             rows.add_reserved()
                             n = 0
-                        
                 except Exception as e:
                     print(e)
                 if self._stop_iteration:
                     raise StopIteration()
+            rows.add_reserved()
         except StopIteration:
             pass
-            # ToDo remove non processed
-        rows.add_reserved()
-        self._add_entries_finished()
     
-    def watch_added(self, n):
+    # RDF specific functions
+    
+    def rdf_watch_added(self, n):
         if n >= 0:
-            row = self.rows.get(n)
+            try:
+                row = self.rows.get(n)
+            except:
+                return
             if row:
                 self.rdf.add(row.get_header())
     
-    def watch_add_list(self, names):
+    def rdf_watch_add_list(self, names):
         self.rdf.add_list_to_order(names)
     
-    def watch_removed(self, name):
+    def rdf_watch_removed(self, name):
         if name:
             self.rdf.remove(name)
     
-    def watch_moved(self, n):
+    def rdf_watch_moved(self, n):
         if n >= 0:
-            row = self.rows.get(n)
+            try:
+                row = self.rows.get(n)
+            except:
+                return
             if row:
                 self.rdf.move(n, row.get_header())
     
-    def watch_cleared(self):
+    def rdf_watch_cleared(self):
         self.rdf.clear()

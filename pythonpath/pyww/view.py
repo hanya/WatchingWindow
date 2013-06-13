@@ -1,4 +1,5 @@
 
+import threading
 import unohelper
 
 from com.sun.star.awt import XWindowListener, XKeyHandler, \
@@ -8,8 +9,9 @@ from com.sun.star.view.SelectionType import SINGLE as ST_SINGLE
 from com.sun.star.style.HorizontalAlignment import RIGHT as HA_RIGHT
 from com.sun.star.awt import Rectangle
 from com.sun.star.awt.MouseButton import LEFT as MB_LEFT, RIGHT as MB_RIGHT
-from com.sun.star.awt.Key import RETURN as K_RETURN
-from com.sun.star.awt.InvalidateStyle import UPDATE as IS_UPDATE, CHILDREN as IS_CHILDREN
+from com.sun.star.awt.Key import RETURN as K_RETURN, \
+    UP as K_UP, DOWN as K_DOWN, HOME as K_HOME, END as K_END, \
+    DELETE as K_DELETE, CONTEXTMENU as K_CONTEXTMENU
 from com.sun.star.awt.PosSize import X as PS_X, Y as PS_Y, \
     WIDTH as PS_WIDTH, HEIGHT as PS_HEIGHT, SIZE as PS_SIZE
 from com.sun.star.awt.MenuItemStyle import CHECKABLE as MIS_CHECKABLE
@@ -21,45 +23,11 @@ from com.sun.star.beans.PropertyState import DIRECT_VALUE as PS_DIRECT_VALUE
 
 from pyww.settings import Settings
 from pyww.helper import create_control, create_container, create_controls, \
-    get_backgroundcolor, PopupMenuWrapper, MenuEntry, messagebox
+    PopupMenuWrapper, MenuEntry, messagebox
+import pyww.resource
 
 
-class CurrentStringResource(object):
-    """ Keeps current string resource. """
-    
-    Current = None
-    
-    def get(ctx):
-        klass = CurrentStringResource
-        if klass.Current is None:
-            import pyww.helper
-            from pyww import RES_DIR, RES_FILE
-            res = pyww.helper.get_current_resource(
-                ctx, RES_DIR, RES_FILE)
-            klass.Current = pyww.helper.StringResource(res)
-        return klass.Current
-    
-    get = staticmethod(get)
-
-
-class SpinnerMouseListener(unohelper.Base, XMouseListener):
-    """ Mouse listener for spinner to stop current iteration. """
-    
-    def __init__(self, act):
-        self.act = act
-    
-    def disposing(self, ev):
-        self.act = None
-    
-    def mouseEntered(self, ev): pass
-    def mouseExited(self, ev): pass
-    def mouseReleased(self, ev): pass
-    def mousePressed(self, ev):
-        self.act.request_to_stop()
-
-
-class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener, 
-    XMouseListener, XGridSelectionListener, XFocusListener, XKeyHandler):
+class WatchingWindowView(object):
     """ Watching window view. """
     
     LEFT_MARGIN = 3
@@ -75,38 +43,31 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
     def __init__(self, ctx, model, frame, parent):
         self.ctx = ctx
         self.frame = frame
-        self.res = CurrentStringResource.get(ctx)
+        self.res = pyww.resource.CurrentStringResource.get(ctx)
         self.model = model
         self.grid = None
         self._context_menu = None
-        settings = Settings(ctx)
-        self.input_line_shown = settings.get("InputLine")
-        self._create_view(ctx, parent, self.res, self.input_line_shown)
-        parent.addWindowListener(self)
+        self.input_line_shown = Settings(ctx).get("InputLine")
+        self._key_handler = self.KeyHandler(self)
+        self._grid_key_handler = self.GridKeyHandler(self)
+        self._focus_listener = self.FocusListener(self, False)
+        self._create_view(ctx, parent, self.res, 
+                            model.get_data_model(), self.input_line_shown)
+        parent.addWindowListener(self.WindowListener(self))
+        self.update_buttons_state()
     
     def focus_to_doc(self):
         """ Move focus to current document. """
         self.frame.getContainerWindow().setFocus()
     
-    def get_doc(self):
-        """ Get document model. """
-        return self.frame.getController().getModel()
+    # Grid functions
     
-    def get_current_selection(self):
-        """ Get current selection in the document. """
-        return self.get_doc().getCurrentSelection()
-    
-    def get_data_model(self):
-        """ Returns data model. """
-        return self.grid.getModel().GridDataModel
-    
-    
-    def select_entry(self, index):
+    def grid_select_entry(self, index):
         """ Select specific row by index. """
-        if index >= 0 and index < self.model.get_watches_count():
+        if 0 <= index < self.model.get_watches_count():
             self.grid.selectRow(index)
     
-    def is_entry_selected(self):
+    def grid_is_entry_selected(self):
         """ Check any entry is selected. """
         return self.grid.hasSelectedRows()
     
@@ -115,6 +76,23 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
         if self.grid.hasSelectedRows():
             return self.grid.getSelectedRows()[0]
         return -1
+    
+    def get_selected_entry_heading(self):
+        """ Get row heading of selected entry. """
+        index = self.get_selected_entry_index()
+        if 0 <= index < self.model.get_watches_count():
+            return self.model.get_address(index)
+        return ""
+    
+    def grid_select_current(self):
+        """ Select cursor row. """
+        self.grid_select_entry(self.grid.getCurrentRow())
+    
+    def grid_deselect_all(self):
+        self.grid.deselectAllRows()
+    
+    def grid_goto_row(self, index):
+        self.grid.goToCell(0, index)
     
     def is_selected_entry_moveable(self, up):
         """ Check selected entry is moveable. """
@@ -125,14 +103,6 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
             return True
         return False
     
-    def get_selected_entry_heading(self):
-        """ Get row heading of selected entry. """
-        index = self.get_selected_entry_index()
-        data_model = self.get_data_model()
-        if 0 <= index < data_model.RowCount:
-            return data_model.getRowHeading(index)
-        return ""
-    
     def dispose(self):
         self.cont = None
         self.model = None
@@ -140,30 +110,30 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
         self.res = None
         self._context_menu = None
     
-    # XEventListener
-    def disposing(self, ev):
-        pass
+    class ListenerBase(unohelper.Base):
+        def __init__(self, act):
+            self.act = act
+        
+        # XEventListener
+        def disposing(self, ev):
+            self.act = None
     
-    # XMouseListener
-    def mouseEntered(self, ev): pass
-    def mouseExited(self, ev): pass
-    def mousePressed(self, ev):
-        if ev.Buttons == MB_RIGHT and ev.ClickCount == 1:
-            try:
-                self.context_menu(ev.X, ev.Y)
-            except Exception as e:
-                print(e)
+    class MouseListener(ListenerBase, XMouseListener):
+        def mouseEntered(self, ev): pass
+        def mouseExited(self, ev): pass
+        def mousePressed(self, ev):
+            if ev.Buttons == MB_RIGHT and ev.ClickCount == 1:
+                self.act.context_menu(ev.X, ev.Y)
+        
+        def mouseReleased(self, ev):
+            if ev.Buttons == MB_LEFT and ev.ClickCount == 2:
+                self.act.cmd_goto()
     
-    def mouseReleased(self, ev):
-        if ev.Buttons == MB_LEFT and ev.ClickCount == 2:
-            try:
-                self.cmd_goto()
-            except Exception as e:
-                print(e)
+    class ButtonListener(ListenerBase, XActionListener):
+        def actionPerformed(self, ev):
+            self.act.execute_cmd(ev.ActionCommand)
     
-    # XActionListener
-    def actionPerformed(self, ev):
-        self.execute_cmd(ev.ActionCommand)
+    # Command processing
     
     def execute_cmd(self, command):
         try:
@@ -172,20 +142,29 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
             pass
     
     def cmd_add(self):
-        # ToDo if selected cell is already added, select it in the grid
+        if 1000 < self.model.get_cells_count():
+            self.errorbox(self.res["Too many cells are selected."], 
+                self.res["Watching Window"])
+            return
         self.model.add_entry()
     
     def cmd_delete(self):
         index = self.get_selected_entry_index()
         if 0 <= index:
             self.model.remove_entry(index)
+            self.grid_select_current()
     
     def cmd_update(self):
         self.model.update_all()
     
     def cmd_goto(self, addr=None):
         if addr is None:
-            addr = self.get_selected_entry_heading()
+            index = self.get_selected_entry_index()
+            if index < 0: return
+            try:
+                addr = self.model.get_address(index)
+            except:
+                pass
         if addr:
             self.goto_point(addr)
     
@@ -204,9 +183,10 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
     
     def cmd_settings(self):
         from pyww.settings import Settings
-        settings = Settings(self.ctx)
-        if settings.configure(self.res):
-            self.model.settings_changed()
+        try:
+            Settings(self.ctx).configure(self.res)
+        except Exception as e:
+            print(e)
     
     def cmd_switch_inputline(self):
         self.switch_input_line()
@@ -231,10 +211,6 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
         ).execute()
     
     
-    def request_to_stop(self):
-        """ Stop current task to add watches. """
-        self.model.stop_iteration()
-    
     def goto_point(self, desc):
         """ move cursor to the specified address. """
         self.dispatch(
@@ -248,57 +224,120 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
             "com.sun.star.frame.DispatchHelper", self.ctx).\
                 executeDispatch(self.frame, cmd, "_self", 0, args)
     
-    # XGridSelectionListener
-    def selectionChanged(self, ev):
-        try:
-            self.update_buttons_state()
-            self.update_input_line()
-        except Exception as e:
-            print(e)
+    class GridSelectionListener(ListenerBase, XGridSelectionListener):
+        def selectionChanged(self, ev):
+            try:
+                self.act.update_buttons_state()
+                self.act.update_input_line()
+            except Exception as e:
+                print(e)
     
-    # XFocusListener
-    def focusGained(self, ev):
-        self.frame.getController().addKeyHandler(self)
+    class FocusListener(ListenerBase, XFocusListener):
+        def __init__(self, act, is_grid):
+            self.act = act
+            self._is_grid = is_grid
+        
+        def focusGained(self, ev):
+            self.act.focus_gained(self._is_grid)
+        
+        def focusLost(self, ev):
+            self.act.focus_lost(self._is_grid)
     
-    def focusLost(self, ev):
-        self.frame.getController().removeKeyHandler(self)
+    def focus_gained(self, is_grid):
+        """ Set key handler to the toolkit when the focus gained into 
+            input field or grid field. 
+            This handler is required to consum some key events. """
+        self.frame.getContainerWindow().getToolkit().addKeyHandler(
+            self._grid_key_handler if is_grid else self._key_handler)
     
-    # XKeyHandler
-    def keyPressed(self, ev):
-        if ev.KeyCode == K_RETURN:
-            index = self.get_selected_entry_index()
-            if 0 <= index:
-                self.model.update_row(index, self.get_input_text())
+    def focus_lost(self, is_grid):
+        """ Remove key handler has been set by focus gained event. """
+        self.frame.getContainerWindow().getToolkit().removeKeyHandler(
+            self._grid_key_handler if is_grid else self._key_handler)
+    
+    class KeyHandler(ListenerBase, XKeyHandler):
+        RETURN = K_RETURN
+        def keyPressed(self, ev):
+            if ev.KeyCode == self.__class__.RETURN:
+                self.act.update_row_formula()
+                return True
+            return False
+        
+        def keyReleased(self, ev):
             return True
-        return False
     
-    def keyReleased(self, ev):
-        return True
+    def update_row_formula(self):
+        """ Update cell formula from input line. """
+        index = self.get_selected_entry_index()
+        if 0 <= index:
+            self.model.update_row(index, self.get_input_text())
+    
+    class GridKeyHandler(ListenerBase, XKeyHandler):
+        RETURN = K_RETURN
+        def keyPressed(self, ev):
+            code = ev.KeyCode
+            if code == K_RETURN:
+                self.act.cmd_goto()
+                return True
+            elif code in (K_UP, K_DOWN, K_HOME, K_END):
+                self.act.grid_cmd_cursor(code, ev.Modifiers & 0b11)
+                return True
+            return False
+        
+        def keyReleased(self, ev):
+            if ev.KeyCode == K_CONTEXTMENU:
+                self.act.grid_cmd_contextmenu()
+            return True
+    
+    def grid_cmd_contextmenu(self):
+        # ToDo current selection is not shown
+        index = self.get_selected_entry_index()
+        if 0 <= index:
+            # ToDo calculate better location
+            self.context_menu(0, 0)
+            # How to move focus to the popup menu? it seems no way
+    
+    def grid_cmd_cursor(self, key, mod):
+        """ Move cursor by key event. """
+        index = self.get_selected_entry_index()
+        if key == K_UP:
+            index -= 1
+        elif key == K_DOWN:
+            index += 1
+        elif key == K_HOME:
+            index = 0
+        elif key == K_END:
+            index = self.model.get_watches_count() - 1
+        if index < 0 or self.model.get_watches_count() <= index:
+            return
+        self.grid_deselect_all()
+        self.grid_goto_row(index)
+        self.grid_select_current()
     
     def update_buttons_state(self):
         """ Update state of buttons by current situation. """
         ubs = self.update_button_state
+        delete_state = False
+        goto_state = False
+        update_state = False
+        up_state = False
+        down_state = False
         if self.model.get_watches_count() == 0:
-            ubs("btn_delete", False)
-            ubs("btn_goto", False)
-            ubs("btn_update", False)
-            
-            ubs("btn_up", False)
-            ubs("btn_down", False)
+            pass
         else:
-            if self.is_entry_selected():
-                ubs("btn_delete", True)
-                ubs("btn_goto", True)
+            if self.grid_is_entry_selected():
+                delete_state = True
+                goto_state = True
                 
-                ubs("btn_up", self.is_selected_entry_moveable(True))
-                ubs("btn_down", self.is_selected_entry_moveable(False))
-            else:
-                ubs("btn_delete", False)
-                ubs("btn_goto", False)
-                
-                ubs("btn_up", False)
-                ubs("btn_down", False)
-            ubs("btn_update", True)
+                up_state = self.is_selected_entry_moveable(True)
+                down_state = self.is_selected_entry_moveable(False)
+            update_state = True
+        ubs("btn_delete", delete_state)
+        ubs("btn_goto", goto_state)
+        ubs("btn_update", update_state)
+        
+        ubs("btn_up", up_state)
+        ubs("btn_down", down_state)
     
     def update_input_line(self):
         addr = self.get_selected_entry_heading()
@@ -319,6 +358,8 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
     
     def context_menu(self, x, y):
         """ Show context menu at the coordinate. """
+        index = self.get_selected_entry_index()
+        if index < 0: return
         _ = self.res.get
         popup = self._context_menu
         if popup is None:
@@ -354,9 +395,7 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
             popup.enableItem(11, self.is_selected_entry_moveable(False))
             
             ps = self.grid.getPosSize()
-            n = popup.execute(
-                    self.cont.getPeer(), 
-                    x + ps.X, y + ps.Y)
+            n = popup.execute(self.cont.getPeer(), x + ps.X, y + ps.Y)
             if n > 0 and n < 1000:
                 self.execute_cmd(popup.getCommand(n))
             elif n >= 1000:
@@ -376,102 +415,71 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
                 MenuEntry(_("Settings..."), 512, 5, "settings"), 
                 MenuEntry(_("About"), 4096, 6, "about"), 
             ), True)
-        
         popup.checkItem(1024, self.input_line_shown)
         popup.checkItem(2048, self.model.store_watches)
         
-        n = popup.execute(
-                self.cont.getPeer(), x, y)
+        n = popup.execute(self.cont.getPeer(), x, y)
         if n > 0:
             self.execute_cmd(popup.getCommand(n))
     
-    def messagebox(self, message, title, message_type, buttons):
+    def _messagebox(self, message, title, message_type, buttons):
         """ Show message in message box. """
         return messagebox(self.ctx, self.frame.getContainerWindow(), 
             message, title, message_type, buttons)
     
     def message(self, message, title):
         """ Shows message with title. """
-        return self.messagebox(message, title, "messbox", 1)
+        return self._messagebox(message, title, "messbox", 1)
     
-    def confirm(self, message, title):
-        """ Show confirm dialog ."""
-        return self.messagebox(
-            message, title, "messbox", 
-            MBB_BUTTONS_OK_CANCEL + MBB_DEFAULT_BUTTON_CANCEL)
-    
-    def confirm_warn_cells(self, cells):
-        """ Show warn cells dialog. """
-        return self.confirm(
-            self.res["Do you want to add %s cells?"] % cells, 
-            self.res["Watching Window"])
-    
-    def spinner_start(self):
-        """ Start and show spinner. """
-        spinner = self.cont.getControl("spinner")
-        spinner.setVisible(True)
-        spinner.startAnimation()
-    
-    def spinner_stop(self):
-        """ Stop and hide spinner. """
-        spinner = self.cont.getControl("spinner")
-        spinner.setVisible(False)
-        spinner.stopAnimation()
-    
-    def update_view(self, rows=None):
-        """ Force redraw the grid. """
-        # ToDo invalidate for rows removed if specified
-        self.cont.getPeer().invalidateRect(
-            self.grid.getPosSize(), IS_UPDATE)
+    def errorbox(self, message, title):
+        """ Shows error message with title. """
+        return self._messagebox(message, title, "errorbox", 1)
     
     def update_button_state(self, name, state):
         """ Update state of specific button. """
-        self.cont.getControl(name).setEnable(state)
+        ctrl = self.cont.getControl(name)
+        if ctrl.isEnabled() != state:
+            ctrl.setEnable(state)
     
     def switch_input_line(self, new_state=None):
         """ Switch to show/hide input line. """
-        ps = self.cont.getPosSize()
-        height = ps.Height
+        height = self.cont.getPosSize().Height
         btn_height = self.BUTTON_HEIGHT
         if new_state is None:
             new_state = not self.input_line_shown
         if new_state:
             self.grid.setPosSize(
                 0, self.TOP_MARGIN * 3 + btn_height + self.INPUT_LINE_HEIGHT, 
-                0, 
-                height - (self.TOP_MARGIN * 3 + btn_height + self.INPUT_LINE_HEIGHT), 
+                0, height - (self.TOP_MARGIN * 3 + btn_height + self.INPUT_LINE_HEIGHT), 
                 PS_Y + PS_HEIGHT)
-            self.cont.getControl("edit_input").addFocusListener(self)
+            self.cont.getControl("edit_input").addFocusListener(self._focus_listener)
         else:
             self.grid.setPosSize(0, self.TOP_MARGIN * 2 + btn_height, 
             0, height - (self.TOP_MARGIN * 2 + btn_height), PS_Y + PS_HEIGHT)
-            self.cont.getControl("edit_input").removeFocusListener(self)
-            self.update_view()
+            self.cont.getControl("edit_input").removeFocusListener(self._focus_listener)
         self.cont.getControl("edit_input").setVisible(new_state)
         self.input_line_shown = new_state
     
-    # XWindowListener
-    def windowMoved(self, ev): pass
-    def windowHidden(self, ev):
-        self.model.stop_watching()
+    class WindowListener(ListenerBase, XWindowListener):
+        def windowMoved(self, ev): pass
+        def windowHidden(self, ev):
+            pass#self.model.stop_watching()
+        def windowShown(self, ev):
+            pass#self.model.start_watching()
+        def windowResized(self, ev):
+            self.act.window_resized(ev.Width, ev.Height)
     
-    def windowShown(self, ev):
-        self.model.start_watching()
-    
-    def windowResized(self, ev):
+    def window_resized(self, width, height):
         gc = self.cont.getControl
-        ps = ev.Source.getPosSize()
-        width = ps.Width
-        height = ps.Height
         btn_width = self.BUTTON_WIDTH
         btn_height = self.BUTTON_HEIGHT
         right_margin = self.RIGHT_MARGIN
         self.cont.setPosSize(0, 0, width, height, PS_SIZE)
         
-        gc("spinner").setPosSize(
-            width - btn_width * 2 - right_margin, 0, 0, 0, PS_X)
         gc("btn_option").setPosSize(
             width - btn_width - right_margin, 0, 0, 0, PS_X)
+        gc("btn_update").setPosSize(
+            width - btn_width * 2 - right_margin - self.BUTTON_SEP, 0, 0, 0, PS_X)
         
         if self.input_line_shown:
             gc("grid").setPosSize(
@@ -485,7 +493,7 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
         gc("edit_input").setPosSize(
             0, 0, width - self.LEFT_MARGIN - right_margin, 0, PS_WIDTH)
     
-    def _create_view(self, ctx, parent, res, show_input_line=False):
+    def _create_view(self, ctx, parent, res, data_model, show_input_line=False):
         from pyww import ICONS_DIR
         LEFT_MARGIN = self.LEFT_MARGIN
         RIGHT_MARGIN = self.RIGHT_MARGIN
@@ -495,10 +503,11 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
         BUTTON_HEIGHT = self.BUTTON_HEIGHT
         INPUT_LINE_HEIGHT = self.INPUT_LINE_HEIGHT
         
-        cont = create_container(ctx, parent, 
-            ("BackgroundColor",), (get_backgroundcolor(parent),))
+        cont = create_container(ctx, parent, (), ())
         self.cont = cont
+        background_color = cont.StyleSettings.DialogColor
         
+        button_listener = self.ButtonListener(self)
         ps = parent.getPosSize()
         create_controls(ctx, cont, 
             (
@@ -506,43 +515,43 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
                     LEFT_MARGIN, TOP_MARGIN, BUTTON_WIDTH, BUTTON_HEIGHT, 
                     ("FocusOnClick", "HelpText", "HelpURL", "ImageURL"), 
                     (False, res["Add"], "", ICONS_DIR + "add_16.png"), 
-                    {"ActionCommand": "add", "ActionListener": self}), 
+                    {"ActionCommand": "add", "ActionListener": button_listener}), 
                 ("Button", "btn_delete", 
                     LEFT_MARGIN + BUTTON_SEP + BUTTON_WIDTH, TOP_MARGIN, 
                     BUTTON_WIDTH, BUTTON_HEIGHT, 
                     ("FocusOnClick", "HelpText", "HelpURL", "ImageURL"), 
                     (False, res["Remove"], "", ICONS_DIR + "delete_16.png"), 
-                    {"ActionCommand": "delete", "ActionListener": self}), 
-                ("Button", "btn_update", 
+                    {"ActionCommand": "delete", "ActionListener": button_listener}), 
+                ("Button", "btn_goto", 
                     LEFT_MARGIN + (BUTTON_SEP + BUTTON_WIDTH) * 2, TOP_MARGIN, 
                     BUTTON_WIDTH, BUTTON_HEIGHT, 
                     ("FocusOnClick", "HelpText", "HelpURL", "ImageURL"), 
-                    (False, res["Update All"], "", ICONS_DIR + "update_16.png"), 
-                    {"ActionCommand": "update", "ActionListener": self}), 
-                ("Button", "btn_goto", 
+                    (False, res["Go to Cell"], "", ICONS_DIR + "goto_16.png"), 
+                    {"ActionCommand": "goto", "ActionListener": button_listener}), 
+                ("Button", "btn_up", 
                     LEFT_MARGIN + (BUTTON_SEP + BUTTON_WIDTH) * 3, TOP_MARGIN, 
                     BUTTON_WIDTH, BUTTON_HEIGHT, 
                     ("FocusOnClick", "HelpText", "HelpURL", "ImageURL"), 
-                    (False, res["Go to Cell"], "", ICONS_DIR + "goto_16.png"), 
-                    {"ActionCommand": "goto", "ActionListener": self}), 
-                ("Button", "btn_up", 
+                    (False, res["Up"], "", ICONS_DIR + "up_16.png"), 
+                    {"ActionCommand": "up", "ActionListener": button_listener}), 
+                ("Button", "btn_down", 
                     LEFT_MARGIN + (BUTTON_SEP + BUTTON_WIDTH) * 4, TOP_MARGIN, 
                     BUTTON_WIDTH, BUTTON_HEIGHT, 
                     ("FocusOnClick", "HelpText", "HelpURL", "ImageURL"), 
-                    (False, res["Up"], "", ICONS_DIR + "up_16.png"), 
-                    {"ActionCommand": "up", "ActionListener": self}), 
-                ("Button", "btn_down", 
+                    (False, res["Down"], "", ICONS_DIR + "down_16.png"), 
+                    {"ActionCommand": "down", "ActionListener": button_listener}), 
+                ("Button", "btn_update", 
                     LEFT_MARGIN + (BUTTON_SEP + BUTTON_WIDTH) * 5, TOP_MARGIN, 
                     BUTTON_WIDTH, BUTTON_HEIGHT, 
                     ("FocusOnClick", "HelpText", "HelpURL", "ImageURL"), 
-                    (False, res["Down"], "", ICONS_DIR + "down_16.png"), 
-                    {"ActionCommand": "down", "ActionListener": self}), 
+                    (False, res["Update All"], "", ICONS_DIR + "update_16.png"), 
+                    {"ActionCommand": "update", "ActionListener": button_listener}), 
                 ("Button", "btn_option", 
                     LEFT_MARGIN + (BUTTON_WIDTH + BUTTON_SEP) * 6, TOP_MARGIN, 
                     BUTTON_WIDTH, BUTTON_HEIGHT, 
                     ("FocusOnClick", "HelpText", "HelpURL", "ImageURL"), 
                     (False, res["Option"], "", ICONS_DIR + "tune_16.png"), 
-                    {"ActionCommand": "option", "ActionListener": self}), 
+                    {"ActionCommand": "option", "ActionListener": button_listener}), 
                 ("Edit", "edit_input", 
                     LEFT_MARGIN, TOP_MARGIN * 2 + BUTTON_HEIGHT, 
                     ps.Width, INPUT_LINE_HEIGHT, 
@@ -550,32 +559,17 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
                     (res["Input line"], ""))
             )
         )
-        # ToDo use SpinningProgressControlModel if fixed
-        _spinner_image = ICONS_DIR + "spin_16_%02d.png"
-        spinner = create_control(ctx, "AnimatedImagesControl", 
-            LEFT_MARGIN + (BUTTON_WIDTH + BUTTON_SEP) * 6, 
-            TOP_MARGIN + 6, 
-            16, 16, 
-            (), (), 
-        )
-        cont.addControl("spinner", spinner)
-        spinner_model = spinner.getModel()
-        spinner_model.insertImageSet(0, 
-            tuple([_spinner_image % i for i in range(1, 6)]))
-        spinner_model.AutoRepeat = True
-        spinner_model.ScaleMode = 0
-        spinner.setVisible(False)
-        spinner.addMouseListener(SpinnerMouseListener(self))
         
         grid_y = TOP_MARGIN + BUTTON_HEIGHT + TOP_MARGIN + \
             ((TOP_MARGIN + INPUT_LINE_HEIGHT) if show_input_line else 0)
         
         grid = create_control(ctx, "grid.UnoControlGrid", 
             0, grid_y, ps.Width, ps.Height - grid_y, 
-            ("Border", "EvenRowBackgroundColor", "HScroll",
-                "SelectionModel", "ShowColumnHeader", 
+            ("BackgroundColor", "Border", "GridDataModel", "EvenRowBackgroundColor", 
+                "HScroll", "SelectionModel", "ShowColumnHeader", 
                 "ShowRowHeader", "VScroll"), 
-            (0, 0xeeeeee, False, ST_SINGLE, True, False, True))
+            (background_color, 0, data_model, 0xeeeeee, 
+                False, ST_SINGLE, True, False, False))
         grid_model = grid.getModel()
         self.grid = grid
         
@@ -588,8 +582,9 @@ class WatchingWindowView(unohelper.Base, XWindowListener, XActionListener,
         column_model.getColumn(2).HorizontalAlign = HA_RIGHT
         
         cont.addControl("grid", grid)
-        grid.addMouseListener(self)
-        grid.addSelectionListener(self)
+        grid.addMouseListener(self.MouseListener(self))
+        grid.addSelectionListener(self.GridSelectionListener(self))
+        grid.addFocusListener(self.FocusListener(self, True))
         
         edit_input = cont.getControl("edit_input")
         self.switch_input_line(show_input_line)

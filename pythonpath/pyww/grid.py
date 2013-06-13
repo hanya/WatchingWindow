@@ -10,7 +10,6 @@ class Rows(object):
     
     def __init__(self, data_model, res):
         self._rows = []
-        self._names = set()
         self.data_model = data_model
         
         self._tooltip = "%s: %%s\n%s: %%s\n%s: %%s\n%s: %%s" % (
@@ -18,7 +17,10 @@ class Rows(object):
         
         self._reserved = []
     
-    def getRowCount(self):
+    def get_data_model(self):
+        return self.data_model
+    
+    def get_row_count(self):
         """ Returns number of rows kept by this container. """
         return self.data_model.RowCount
     
@@ -31,7 +33,6 @@ class Rows(object):
         for row in self._rows:
             row.removed()
         self._rows = []
-        self.listeners = []
     
     def enable_update(self, state):
         """ Enable watching on all rows. """
@@ -57,11 +58,10 @@ class Rows(object):
         data = row.get_data()
         data_model.addRow(row.get_header(), data)
         data_model.updateRowToolTip(
-            self.getRowCount() -1, self._tooltip_from_data(data))
+            self.get_row_count() -1, self._tooltip_from_data(data))
     
     def _broadcast_removed(self, index):
         self.data_model.removeRow(index)
-    
     
     def _broadcast_reserved_added(self, index, rows):
         data_model = self.data_model
@@ -76,39 +76,30 @@ class Rows(object):
     
     def reserve_watch(self, cell):
         """ Reserve to add watch. Reserved cells are added by add_reserved method. """
-        if not cell.AbsoluteName in self._names:
-            row = GridRow(cell, self)
-            self._reserved.append(row)
+        self._reserved.append(GridRow(cell, self))
     
     def add_reserved(self):
         """ Add reserved rows to the list. """
         if self._reserved:
             n = len(self._rows)
             self._rows[n:n + len(self._reserved)] = self._reserved
-            self._names.update(
-                [row.get_header() for row in self._reserved])
             self._broadcast_reserved_added(
                 len(self._rows) - len(self._reserved), self._reserved)
         self._reserved[:] = []
     
-    
     def add_watch(self, cell):
         """ Add new cell to watch. """
-        if not cell.AbsoluteName in self._names:
-            row = GridRow(cell, self)
-            self._names.add(row.get_header())
-            self._rows.append(row)
-            i = len(self._rows) - 1
-            self._broadcast_added(i, row)
-            return i
+        row = GridRow(cell, self)
+        self._rows.append(row)
+        i = len(self._rows) - 1
+        self._broadcast_added(i, row)
+        return i
     
     def remove_watch(self, index):
         """ Remove watch by index. """
-        if index >= 0 and index < len(self._rows):
+        if 0 <= index < len(self._rows):
             try:
-                row = self._rows.pop(index)
-                self._names.remove(row.get_header())
-                row.removed()
+                self._rows.pop(index).removed()
                 self._broadcast_removed(index)
             except Exception as e:
                 print("remove_watch: %s" % str(e))
@@ -116,14 +107,9 @@ class Rows(object):
     def remove_all_watch(self):
         """ Remove all watches. """
         for row in self._rows:
-            try:
-                self._names.remove(row.get_header())
-            except:
-                pass
             row.removed()
         
         self._rows[:] = []
-        self._names.clear()
         self.data_model.removeAllRows()
     
     def update_watch(self, row):
@@ -143,8 +129,6 @@ class Rows(object):
             for i, row in enumerate(self._rows):
                 self._broadcast_changed(i, row)
                 names.append(row.get_header())
-            self._names.clear()
-            self._names.update(names)
         except Exception as e:
             print("update_all_watch: %s" % str(e))
     
@@ -231,15 +215,15 @@ class GridRow(unohelper.Base, XModifyListener):
             addr = self.cell.AbsoluteName
             
             n = addr.rfind(".")
-            sheet_name = addr[1:n]
+            sheet_name = addr[1:n] # ignore first $
             if sheet_name.startswith("'"):
                 sheet_name = sheet_name[1:len(sheet_name)-1].replace("''", "'")
             
             return (
-                sheet_name, addr[n + 1:].replace("$", ""), 
+                sheet_name, 
+                addr[n + 1:].replace("$", ""), 
                 self.cell.getString(), 
                 self.cell.FormulaLocal if self.cell.getType() == CCT_FORMULA else ""
-                #self.cell.getFormula() if self.cell.getType() == CCT_FORMULA else ""
             )
         else:
             return ("", "", "internal", "error")
@@ -265,12 +249,10 @@ class GridRow(unohelper.Base, XModifyListener):
     
     def get_formula(self):
         """ get formula of the cell. """
-        #return self.cell.getFormula()
         return self.cell.FormulaLocal
     
     def set_formula(self, text):
         """ set formula to the cell. """
-        #self.cell.setFormula(text)
         self.cell.FormulaLocal = text
     
     # XEventListener

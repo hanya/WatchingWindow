@@ -11,30 +11,25 @@ class Settings(object):
         self.res = None
         self._loaded = False
         self.check_input = None
-        self.warn_cells = None
     
     def configure(self, res):
         from pyww.dialogs import SettingsDialog
         cua = get_config_access(self.ctx, CONFIG_NODE, True)
         
         show_input_line = cua.getPropertyValue("InputLine")
-        warn_cells = cua.getPropertyValue("WarnNumberOfCells")
         store = cua.getPropertyValue("StoreWatches")
         
         dialog = SettingsDialog(
             self.ctx, res, 
             show_input_line=show_input_line, 
-            warn_cells=warn_cells, 
             store=store, 
         )
         result = dialog.execute()
         if result:
             self.check_input = result["show_input_line"]
-            self.warn_cells = result["warn_cells"]
             self.store = result["store"]
             try:
                 cua.setPropertyValue("InputLine", self.check_input)
-                cua.setPropertyValue("WarnNumberOfCells", self.warn_cells)
                 cua.setPropertyValue("StoreWatches", self.store)
                 cua.commitChanges()
             except Exception as e:
@@ -45,7 +40,6 @@ class Settings(object):
     def _load(self):
         cua = get_config_access(self.ctx, CONFIG_NODE)
         self.check_input = cua.getPropertyValue("InputLine")
-        self.warn_cells = cua.getPropertyValue("WarnNumberOfCells")
         self.store = cua.getPropertyValue("StoreWatches")
     
     def get(self, name):
@@ -54,8 +48,6 @@ class Settings(object):
             self._load()
         if name == "InputLine":
             return self.check_input
-        elif name == "WarnNumberOfCells":
-            return self.warn_cells
         elif name == "StoreWatches":
             return self.store
 

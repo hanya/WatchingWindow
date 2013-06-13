@@ -65,15 +65,6 @@ def create_controls(ctx, container, controls):
     return container
 
 
-def get_backgroundcolor(window):
-    """ Get background color through accesibility api. """
-    try:
-        return window.getAccessibleContext().getBackground()
-    except:
-        pass
-    return 0xeeeeee
-
-
 from com.sun.star.task import XInteractionHandler
  
 class DummyHandler(unohelper.Base, XInteractionHandler):
@@ -86,8 +77,8 @@ class DummyHandler(unohelper.Base, XInteractionHandler):
 def get_resource(ctx, location, name, locale):
     """ load from resource and returns them as a dictionary. """
     try:
-        resolver = ctx.getServiceManager().createInstanceWithContext(
-            "com.sun.star.resource.StringResourceWithLocation", ctx)
+        resolver = create_service(ctx, 
+            "com.sun.star.resource.StringResourceWithLocation")
         resolver.initialize((location, True, locale, name, "", DummyHandler()))
         return resolver
     except Exception as e:
@@ -142,8 +133,8 @@ from com.sun.star.beans.PropertyState import DIRECT_VALUE as PS_DIRECT_VALUE
 def get_config_access(ctx, nodepath, updatable=False):
     """ get configuration access. """
     arg = PropertyValue("nodepath", 0, nodepath, PS_DIRECT_VALUE)
-    cp = ctx.getServiceManager().createInstanceWithContext(
-        "com.sun.star.configuration.ConfigurationProvider", ctx)
+    cp = create_service(ctx, 
+            "com.sun.star.configuration.ConfigurationProvider")
     if updatable:
         return cp.createInstanceWithArguments(
         "com.sun.star.configuration.ConfigurationUpdateAccess", (arg,))
@@ -250,8 +241,7 @@ class MenuEntry(object):
 
 def create_popup(ctx, items, hide_disabled=False):
     """ creates new popup menu. """
-    popup = ctx.getServiceManager().createInstanceWithContext(
-        "com.sun.star.awt.PopupMenu", ctx)
+    popup = create_service(ctx, "com.sun.star.awt.PopupMenu")
     popup.hideDisabledEntries(hide_disabled)
     for item in items:
         if item.id == -1:
@@ -269,16 +259,9 @@ class PopupMenuWrapper(object):
     
     def __init__(self, ctx, items, hide_disabled=False):
         self._popup = create_popup(ctx, items, hide_disabled)
-        self._use_point = check_method_parameter(
-            ctx, "com.sun.star.awt.XPopupMenu", "execute", 
-            1, "com.sun.star.awt.Point")
     
     def execute(self, peer, x, y, direction=PMD_EXECUTE_DEFAULT):
-        if self._use_point:
-            pos = Point(x, y)
-        else:
-            pos = Rectangle(x, y, 0, 0)
-        return self._popup.execute(peer, pos, direction)
+        return self._popup.execute(peer, Rectangle(x, y, 0, 0), direction)
     
     def getCommand(self, id):
         return self._popup.getCommand(id)
