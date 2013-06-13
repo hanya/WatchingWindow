@@ -11,11 +11,6 @@
 			<info>
 				<desc>Watching window settings.</desc>
 			</info>
-			<prop oor:name="WarnNumberOfCells" oor:type="xs:int">
-				<info>
-					<desc>Confirm if number of cells are over the value at addition.</desc>
-				</info>
-			</prop>
 			<prop oor:name="InputLine" oor:type="xs:boolean">
 				<info>
 					<desc>Show input line at start time.</desc>
