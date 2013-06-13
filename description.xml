@@ -3,9 +3,10 @@
 xmlns:xlink="http://www.w3.org/1999/xlink"
 xmlns:d="http://openoffice.org/extensions/description/2006">
 <identifier value="mytools.calc.WatchWindow" />
-<version value="0.4.4" />
+<version value="0.5.0" />
 <dependencies>
-<OpenOffice.org-minimal-version value="3.4" d:name="OpenOffice.org 3.4" />
+<d:OpenOffice.org-minimal-version value="3.4" d:name="OpenOffice.org 3.4" />
+<d:OpenOffice.org-maximal-version value="4.0" d:name="OpenOffice.org 4.0" />
 </dependencies>
 <registration>
 <simple-license accept-by="admin" default-license-id="this" suppress-on-update="true" suppress-if-required="true">
@@ -17,7 +18,7 @@ xmlns:d="http://openoffice.org/extensions/description/2006">
 <name lang="fr">Surveillance feuille</name>
 <name lang="en-US">Watching Window</name>
 <name lang="ja">ウォッチウィンドウ</name>
-<name lang="es">Watching Window (ventana de observación)</name>
+<name lang="es">Watching Window</name>
 </display-name>
 <extension-description>
 <src lang="ru" xlink:href="descriptions/desc_ru.txt"/>
