@@ -72,10 +72,6 @@ aplicar el nuevo valor.
 Haga clic en el botón 'Opciones' y elija 'Preferencias'... entonces se
 muestrará un cuadro para configurar la ventana de Watching Window. 
 
-=== Advertir si demasiadas celdas van a ser añadidas ===
-Si intenta añadir varias celdas a observación en una cifra superior al valor
-configurado, la extensión pide confirmación. El valor predeterminado es 10. 
-
 === Mostrar línea de entrada ===
 Si la casilla de verificación está marcada, la 'Línea de entrada' se muestra
 al momento del inicio. 

@@ -49,9 +49,6 @@ de saisie (si vous avez coché la case dans les paramètres).
 == Paramétrage ==
 Cliquez sur le bouton Option (tout à droite) et choisissez Paramètres... Un dialogue apparaît pour vous permettre de paramétrer la surveillance.  
 
-=== Avertir lors d'ajout de cellules ===
-Une demande de confirmation vous est demandé si vous tentez d'ajouter un nombre de cellules supérieur à ce qui est paramétré (par défaut 10). 
-
 === Afficher la ligne de saisie ===
 Si la case est cochée, la ligne de saisie est affiché à chaque démarrage.  
 

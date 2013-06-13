@@ -67,10 +67,6 @@ and push enter key to apply the new value.
 Click Option button and choose Settings... and then shows dialog 
 to configure Watching window. 
 
-=== Warn if too many cells are going to be added ===
-If you try to add some watching cells at a time in a number higher than setting,
-the extension ask for confirmation to add them all. Default value is 10. 
-
 === Show input line ===
 If the check box is checked, the Input Line is shown at the starting time. 
 
