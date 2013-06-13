@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tree_view version="01-03-2013">
-<help_section application="watchingwindow" id="63463006" title="Окно наблюдения">
+<tree_view version="13-06-2013">
+<help_section application="watchingwindow" id="10614936" title="Окно наблюдения">
 <topic id="watchingwindow/mytools.calc.WatchWindow/index.xhp">Окно наблюдения</topic>
 </help_section>
 </tree_view>
