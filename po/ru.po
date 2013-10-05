@@ -20,7 +20,7 @@ msgstr "Окно наблюдения"
 
 #: id.extension.description
 msgid "Provides you to check the value or the formula of a cell on the spreadsheet."
-msgstr "Позволяет видеть значения выбранных ячеек документа Calc на панели задач."
+msgstr "Позволяет отслеживать значения или формулы ячеек на листе."
 
 #: id.label.settings
 msgid "Settings"
@@ -28,7 +28,7 @@ msgstr "Настройки"
 
 #: id.title.settings
 msgid "Watching Window Settings"
-msgstr "Настройки “Окна наблюдения”"
+msgstr "Настройки окна наблюдения"
 
 #: id.label.default
 msgid "Default Settings"
@@ -36,15 +36,15 @@ msgstr "Настройки по умолчанию"
 
 #: id.label.inputline
 msgid "Show input line"
-msgstr "Показывать строку ввода"
+msgstr "Покажи строку ввода"
 
 #: id.label.store
 msgid "Store watches"
-msgstr "Store watches"
+msgstr "Запомни список ячеек"
 
 #: id.label.about
 msgid "About"
-msgstr "About"
+msgstr "О"
 
 #: id.label.ok
 msgid "~OK"
@@ -68,11 +68,11 @@ msgstr "Очистка"
 
 #: id.down
 msgid "Down"
-msgstr "Поднять вверх"
+msgstr "Вниз"
 
 #: id.updateall
 msgid "Update All"
-msgstr "Обновить"
+msgstr "Обнови все"
 
 #: id.gotocell
 msgid "Go to Cell"
@@ -80,7 +80,7 @@ msgstr "К ячейке"
 
 #: id.up
 msgid "Up"
-msgstr "Опустить вниз"
+msgstr "Вверх"
 
 #: id.value
 msgid "Value"
@@ -88,7 +88,7 @@ msgstr "Знач."
 
 #: id.remove
 msgid "Remove"
-msgstr "Удалить"
+msgstr "Удали"
 
 #: id.cell
 msgid "Cell"
@@ -100,7 +100,7 @@ msgstr "Настройки..."
 
 #: id.add
 msgid "Add"
-msgstr "Добавить"
+msgstr "Добавь"
 
 #: id.goto
 msgid "Go to"
@@ -120,4 +120,4 @@ msgstr "Выбор"
 
 # :id.toomanycells
 msgid "Too many cells are selected."
-msgstr "Too many cells are selected."
+msgstr "Выделено слишком много ячеек."
