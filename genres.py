@@ -38,8 +38,7 @@ xmlns:d="http://openoffice.org/extensions/description/2006">
 <identifier value="mytools.calc.WatchWindow" />
 <version value="{VERSION}" />
 <dependencies>
-<d:OpenOffice.org-minimal-version value="3.4" d:name="OpenOffice.org 3.4" />
-<d:OpenOffice.org-maximal-version value="4.0" d:name="OpenOffice.org 4.0" />
+<d:OpenOffice.org-minimal-version value="4.0" d:name="OpenOffice.org 4.0" />
 </dependencies>
 <update-download>
 <src xlink:href="https://raw.github.com/hanya/WatchingWindow/master/files/WatchingWindow-{VERSION}.oxt"/>
