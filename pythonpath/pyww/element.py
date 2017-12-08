@@ -4,7 +4,7 @@ from com.sun.star.lang import XComponent
 from com.sun.star.ui import XUIElement, XToolPanel
 from com.sun.star.ui.UIElementType import TOOLPANEL as UET_TOOLPANEL
 
-from pyww import RESOURCE_NAME
+RESOURCE_NAME = "private:resource/toolpanel/mytools.test.sidebar/"
 
 try:
     from com.sun.star.ui import XSidebarPanel, LayoutSize
