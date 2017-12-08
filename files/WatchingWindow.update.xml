@@ -8,6 +8,6 @@ xmlns:d="http://openoffice.org/extensions/description/2006">
 <d:OpenOffice.org-minimal-version value="4.0" d:name="OpenOffice.org 4.0" />
 </dependencies>
 <update-download>
-<src xlink:href="https://github.com/hanya/MRI/releases/download/v0.5.2/WatchingWindow-0.5.2.oxt"/>
+<src xlink:href="https://github.com/hanya/WatchingWindow/releases/download/v0.5.2/WatchingWindow-0.5.2.oxt"/>
 </update-download>
 </description>
